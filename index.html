@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bayazit Funknetz-Schule</title>
+<meta name="description" content="Funk verstehen – Funkwellen, Handynetz, 1G bis 5G, WLAN, Bluetooth, Radio, Satellit und GPS. Lern-App mit kleinen Videos und Quiz.">
+<meta name="theme-color" content="#070b10">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#070b10;--bg2:#0b1119;--card:#0e1620;--card2:#121c28;--line:#1c2836;--tx:#e6edf5;--mut:#8796a8;--gold:#f5c542;--green:#22c55e;--red:#f43f5e;--blue:#3b82f6;--cv:#090f16;--grid:#121b26;
+--mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Mono",Menlo,Consolas,"Roboto Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color-scheme:dark}
+[data-theme=light]{--bg:#eef2f6;--bg2:#e6ebf1;--card:#ffffff;--card2:#f6f8fb;--line:#d6dee7;--tx:#0d1520;--mut:#566475;--gold:#b7860b;--green:#15803d;--red:#e11d48;--blue:#2563eb;--cv:#fbfcfe;--grid:#edf1f5;color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);font-family:var(--sans);-webkit-text-size-adjust:100%}
+body{min-height:100vh;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:800;letter-spacing:.04em;font-size:15px;white-space:nowrap}
+.logo .dia{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#111;font-size:14px}
+.logo small{color:var(--mut);font-weight:600;font-size:10px;display:block;letter-spacing:.14em}
+.theme{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.theme button{padding:7px 11px;font-size:14px;font-family:var(--mono);color:var(--mut);white-space:nowrap}
+.theme button span{display:none}@media (min-width:520px){.theme button span{display:inline}}
+.theme button.on{background:var(--card2);color:var(--tx);box-shadow:inset 0 -2px 0 #22d3ee}
+.layout{display:block;max-width:1240px;margin:0 auto}
+aside.side{display:none}
+main{padding:16px 14px 60px;max-width:860px;margin:0 auto}
+@media (min-width:900px){
+ .layout{display:grid;grid-template-columns:290px 1fr;gap:0}
+ aside.side{display:block;position:sticky;top:57px;height:calc(100vh - 57px);overflow:auto;border-right:1px solid var(--line);padding:14px}
+ main{padding:24px 28px 80px;width:100%}
+}
+.search{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font:inherit;font-size:14px;outline:none}
+.search:focus{border-color:#22d3ee}
+.sgrp{margin-top:14px}
+.sgrp h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ac);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.sgrp a{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;font-size:13.5px;color:var(--mut)}
+.sgrp a:hover{background:var(--card);color:var(--tx)}
+.sgrp a.act{background:var(--card2);color:var(--tx);box-shadow:inset 3px 0 0 var(--ac)}
+.sgrp a .ck{margin-left:auto;color:var(--green);font-size:12px}
+.side .sq{display:block;margin-top:16px;padding:10px;border-radius:10px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;text-align:center;background:var(--card)}
+.hero{padding:6px 2px 16px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--mut)}
+.hero h1{font-family:var(--mono);font-size:30px;line-height:1.1;margin:6px 0 6px;letter-spacing:-.01em}
+.hero h1 span{background:linear-gradient(90deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-family:var(--mono);font-size:11px;padding:5px 9px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--mut)}
+.chip b{color:var(--tx)}
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;padding:16px;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 16%,var(--card)) 0%,var(--card) 60%);min-height:170px;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.tile:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 60%,var(--line))}
+.tile:first-child{grid-column:span 2}
+.tile::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:var(--ac);opacity:.10;filter:blur(8px)}
+.ti-top{display:flex;justify-content:space-between;align-items:flex-start}
+.ti-ico{font-size:40px;line-height:1}
+.ti-num{font-family:var(--mono);font-size:12px;color:var(--ac);font-weight:700;border:1px solid color-mix(in srgb,var(--ac) 50%,transparent);padding:2px 7px;border-radius:7px}
+.tile h2{font-family:var(--mono);font-size:15px;letter-spacing:.06em;margin-top:12px;color:var(--ac);line-height:1.25}
+.tile p{font-size:13px;color:var(--mut);margin-top:4px;flex:1}
+.prog{height:6px;border-radius:9px;background:color-mix(in srgb,var(--ac) 15%,var(--line));margin-top:12px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--ac);border-radius:9px}
+.ti-foot{font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:6px;letter-spacing:.06em}
+@media (min-width:640px){.bento{grid-template-columns:repeat(3,1fr)}.tile:first-child{grid-column:span 2}.hero h1{font-size:38px}}
+.back{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--mut);padding:7px 11px;border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:14px}
+.back:hover{color:var(--tx)}
+.ahead{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(150deg,color-mix(in srgb,var(--ac) 18%,var(--card)),var(--card) 70%);margin-bottom:14px}
+.ahead .ti-ico{font-size:46px}
+.ahead h1{font-family:var(--mono);font-size:22px;color:var(--ac);margin-top:8px;letter-spacing:.03em}
+.ahead p{color:var(--mut);font-size:14px}
+.lgrid{display:grid;gap:10px}
+@media (min-width:640px){.lgrid{grid-template-columns:1fr 1fr}}
+.lcard{display:block;position:relative;border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:14px;padding:13px 14px;background:var(--card)}
+.lcard:hover{background:var(--card2)}
+.lk{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ac);font-weight:700}
+.lcard b{display:block;font-size:16px;margin-top:2px;padding-right:26px}
+.lcard .lsub{font-size:12.5px;color:var(--mut);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lcard .done{position:absolute;right:12px;top:12px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:color-mix(in srgb,var(--green) 20%,transparent);color:var(--green);font-weight:800}
+.meta{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ac);font-weight:700}
+.ltitle{font-family:var(--mono);font-size:22px;margin:4px 0 12px;line-height:1.2}
+.player{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--cv)}
+.player canvas{display:block;width:100%;aspect-ratio:400/240;cursor:pointer}
+.cap{padding:12px 14px;border-top:1px solid var(--line);background:var(--card);min-height:86px}
+.cap .sn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ac);font-weight:700}
+.cap p{font-size:15px;margin-top:3px}
+.ctrl{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border-top:1px solid var(--line)}
+.pbtn{width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:var(--ac);color:#0b0f14;display:grid;place-items:center;font-size:16px;font-weight:900}
+input[type=range]{flex:1;accent-color:var(--ac);height:28px;min-width:0}
+.tm{font-family:var(--mono);font-size:11px;color:var(--mut);min-width:68px;text-align:right}
+.ctrl2{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:0 12px 12px;background:var(--card2)}
+.sbtn{font-family:var(--mono);font-size:12px;padding:6px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--mut);min-width:34px}
+.sbtn.on{border-color:var(--ac);color:var(--tx);background:color-mix(in srgb,var(--ac) 18%,var(--card))}
+.ctrl2 .gap{flex:1}
+.info{display:grid;gap:10px;margin-top:14px}
+@media (min-width:640px){.info{grid-template-columns:1fr 1fr}}
+.ibox{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:14px;padding:12px 14px;background:var(--card)}
+.ibox h3{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--c);margin-bottom:4px}
+.ibox p{font-size:14px}
+.lnav{display:flex;gap:10px;margin-top:16px}
+.lnav a{flex:1;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);font-size:13px}
+.lnav a small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--mut)}
+.lnav a.nx{text-align:right}
+.lnav a.dis{opacity:.35;pointer-events:none}
+.qcard{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--card)}
+.qtop{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--mut)}
+.qbar{height:6px;border-radius:9px;background:var(--line);margin:8px 0 14px;overflow:hidden}
+.qbar i{display:block;height:100%;background:#f43f5e}
+.qq{font-size:18px;font-weight:650;margin-bottom:12px}
+.qimg{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px;background:var(--cv)}
+.qimg canvas{display:block;width:100%;aspect-ratio:400/240}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-size:15px}
+.opt:hover:not([disabled]){border-color:var(--mut)}
+.opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 16%,var(--card))}
+.opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,var(--card))}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--card2);border:1px solid var(--line)}
+.fb b{font-family:var(--mono)}
+.fb .go{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--blue)}
+.big{display:block;width:100%;margin-top:14px;padding:13px;border-radius:12px;background:#f43f5e;color:#fff;font-family:var(--mono);font-weight:800;letter-spacing:.06em;text-align:center}
+.score{font-family:var(--mono);font-size:48px;font-weight:800;text-align:center;margin:8px 0}
+.rep a{display:block;padding:9px 12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;background:var(--card2);font-size:14px}
+.foot{margin-top:28px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--mut);letter-spacing:.08em}
+.tile.qz{grid-column:span 1}
+[data-theme=light] .tile h2,[data-theme=light] .ahead h1,[data-theme=light] .lk,[data-theme=light] .meta,[data-theme=light] .ti-num,[data-theme=light] .cap .sn,[data-theme=light] .sgrp h4{color:color-mix(in srgb,var(--ac) 68%,#000)}
+</style>
+</head>
+<body>
+<header class="top">
+ <a class="logo" href="#home"><span class="dia">📡</span><span>FUNKNETZ-SCHULE<small>BAYAZIT · LERN-APP</small></span></a>
+ <div class="theme" id="theme">
+  <button data-m="dark" title="Dunkel">☾<span> Dunkel</span></button><button data-m="light" title="Hell">☀<span> Hell</span></button><button data-m="auto" title="Automatisch">◐<span> Auto</span></button>
+ </div>
+</header>
+<div class="layout">
+ <aside class="side" id="side"></aside>
+ <main id="main"></main>
+</div>
+<script>
+"use strict";
+/* ============ Speicher ============ */
+const KEY='funkschule-v1';
+let ST={seen:{},best:0,runs:0};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)ST=Object.assign(ST,s);}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+
+/* ============ Bereiche ============ */
+const AREAS=[
+ {id:'wellen',name:'Funkwellen',icon:'〰️',col:'#22d3ee',desc:'Was eine Funkwelle ist, Frequenz, Spektrum, Antenne, Modulation und Reichweite.'},
+ {id:'mobil',name:'Das Handynetz',icon:'📱',col:'#a78bfa',desc:'Funkzellen, Sendemast, Weg eines Anrufs, Handover, SIM-Karte und Netzbetreiber.'},
+ {id:'gen',name:'1G bis 6G',icon:'🚀',col:'#f59e0b',desc:'Vom Koffertelefon über GSM, UMTS und LTE bis 5G – und was mit 6G kommt.'},
+ {id:'nah',name:'WLAN & Nahfunk',icon:'📶',col:'#84cc16',desc:'WLAN, Kanäle, Bluetooth, NFC, RFID und ein sicheres Heimnetz.'},
+ {id:'weit',name:'Rundfunk & Satellit',icon:'🛰️',col:'#e879f9',desc:'Radio, Antennenfernsehen, Satelliten, GPS und Internet aus dem All.'},
+ {id:'praxis',name:'Praxis & Sicherheit',icon:'🛡️',col:'#60a5fa',desc:'Empfang messen, Funklöcher, Strahlung, Notruf, Daten rechnen und Funkgeräte.'}
+];
+const QUIZCOL='#f43f5e';
+
+/* ============ Szenen-Bausteine (virtuell 400 × 240) ============ */
+const E=(ch,x,y,s=36,o={})=>({t:'emo',ch,x,y,s,...o});
+const P=(tx,x,y,c='a',o={})=>({t:'pill',tx,x,y,c,...o});
+const A=(x1,y1,x2,y2,c='mut',o={})=>({t:'arr',x1,y1,x2,y2,c,...o});
+const T=(tx,x,y,s=12,c='txt',b=0,o={})=>({t:'txt',tx,x,y,s,c,b,...o});
+const B=(x,y,w,h,c,tx='',o={})=>({t:'box',x,y,w,h,c,tx,...o});
+const BAR=(x,y,w,h,c,top,bot)=>({t:'bar',x,y,w,h,c,top,bot});
+const X=(x,y,s=18)=>({t:'x',x,y,s});
+const K=(x,y,s=18)=>({t:'chk',x,y,s});
+const LN=(pts,c='a',o={})=>({t:'line',pts,c,...o});
+const S=(say,add,clear=0)=>({say,add,clear});
+/* Funk-Bausteine */
+const WV=(x1,x2,y,amp,len,c='a',o={})=>({t:'wave',x1,x2,y,amp,len,c,...o});
+const TW=(x,y,h=90,o={})=>({t:'tower',x,y,h,...o});
+const PH=(x,y,s=1,o={})=>({t:'phone',x,y,s,...o});
+const RAD=(x,y,n=3,gap=14,a0=-60,a1=60,c='a',o={})=>({t:'rad',x,y,n,gap,a0,a1,c,...o});
+const HX=(x,y,r,c='a',tx='',o={})=>({t:'hex',x,y,r,c,tx,...o});
+const RT=(x,y,s=1,o={})=>({t:'router',x,y,s,...o});
+const SAT=(x,y,s=1,o={})=>({t:'sat',x,y,s,...o});
+const SB=(x,y,n,s=1,c='a')=>({t:'sbars',x,y,n,s,c});
+const GL=(x,y,r)=>({t:'globe',x,y,r});
+const D=(x,y,r=4,c='a',o={})=>({t:'dot',x,y,r,c,...o});
+const ARC=(cx,cy,rx,ry,a0,a1,n=36)=>Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n;return[cx+Math.cos(a)*rx,cy+Math.sin(a)*ry];});
+const PI=Math.PI;
+/* Wabennetz */
+const HEXC=[[112,70],[171,70],[230,70],[289,70],[82,121],[141,121],[200,121],[259,121],[318,121],[112,172],[171,172],[230,172],[289,172]];
+const HCOL=['blue','gold','green'];
+const HFREQ=[0,1,2,0,2,0,1,2,0,1,2,0,1];
+/* Bluetooth-Sprünge */
+const HOP=[150,70,120,190,90,160,60,130,180,100,140].map((y,i)=>[40+i*32,y]);
+/* Kanäle 2,4 GHz */
+const CH=Array.from({length:13},(_,i)=>i+1);
+const chx=c=>36+c*24;
+
+/* ============ Lektionen ============ */
+const L=[
+/* ---------- FUNKWELLEN ---------- */
+{id:'welle',a:'wellen',t:'Was ist eine Funkwelle?',steps:[
+ S('Funkwellen sind elektromagnetische Wellen – unsichtbar, aber überall um uns herum. Sie tragen Sprache, Musik, Bilder und Daten durch die Luft.',[TW(70,205,110),RAD(70,95,4,24,-50,50,'a'),PH(330,135,1.3),P('UNSICHTBAR · ÜBERALL',240,28,'a')]),
+ S('Eine Welle schwingt auf und ab. Der Abstand von einem Wellenberg zum nächsten heißt Wellenlänge. Die Höhe der Welle ist die Amplitude – sie steht für die Stärke.',[WV(30,370,125,40,113,'a'),A(58,70,171,70,'gold',{bi:1}),P('WELLENLÄNGE λ',114,48,'gold'),A(284,125,284,87,'blue',{bi:1}),P('AMPLITUDE',284,206,'blue')],1),
+ S('Funkwellen sind extrem schnell: Sie breiten sich mit Lichtgeschwindigkeit aus – rund 300.000 Kilometer pro Sekunde.',[T('300.000 km/s',200,90,30,'gold',1),P('LICHTGESCHWINDIGKEIT',200,140,'a'),T('≈ 7,5-mal um die Erde in 1 Sekunde',200,180,12,'mut',1)],1),
+ S('Nachgewiesen hat sie Heinrich Hertz zwischen 1886 und 1888 in Karlsruhe. Nach ihm ist die Einheit für Schwingungen benannt: Hertz (Hz).',[E('👨‍🔬',80,115,54),T('HEINRICH HERTZ',255,75,14,'txt',1),T('1886–1888 · Karlsruhe',255,102,12,'mut',1),P('1 Hz = 1 SCHWINGUNG/SEKUNDE',255,148,'gold')],1)
+],info:{was:'Eine Funkwelle ist eine elektromagnetische Welle – wie Licht, nur mit viel größerer Wellenlänge. Sie braucht keine Luft und reist sogar durchs Weltall.',so:'Wellen beschreibt man mit Wellenlänge (Abstand zweier Wellenberge), Frequenz (Schwingungen pro Sekunde) und Amplitude (Höhe = Stärke).',bed:'Ohne Funkwellen gäbe es kein Handy, kein WLAN, kein Radio, kein GPS und keinen Funkschlüssel fürs Auto.',tipp:'Licht, Funk, Wärmestrahlung und Röntgenstrahlen sind alle elektromagnetische Wellen – sie unterscheiden sich nur in Frequenz und Energie.'}},
+
+{id:'frequenz',a:'wellen',t:'Frequenz & Wellenlänge',steps:[
+ S('Die Frequenz sagt, wie oft eine Welle pro Sekunde schwingt. 100 Megahertz bedeuten: 100 Millionen Schwingungen pro Sekunde.',[T('NIEDRIGE FREQUENZ',200,30,11,'mut',1),WV(30,370,78,24,170,'blue'),T('HOHE FREQUENZ',200,128,11,'mut',1),WV(30,370,178,24,42,'red')]),
+ S('Je höher die Frequenz, desto kürzer die Wellenlänge. Beides hängt fest zusammen: Wellenlänge = Lichtgeschwindigkeit ÷ Frequenz.',[T('λ = c ÷ f',200,78,30,'gold',1),P('WELLENLÄNGE = 300.000 km/s ÷ FREQUENZ',200,135,'a'),T('Faustformel: λ in Metern = 300 ÷ f in MHz',200,182,12,'mut',1)],1),
+ S('Beispiele: UKW-Radio mit 100 MHz hat 3 Meter Wellenlänge, das Handynetz mit 900 MHz rund 33 cm, WLAN mit 2,4 GHz nur 12,5 cm.',[T('UKW-Radio · 100 MHz',50,60,13,'txt',1,{al:'left'}),T('3 m',350,60,14,'gold',1,{al:'right'}),T('Handy · 900 MHz',50,105,13,'txt',1,{al:'left'}),T('33 cm',350,105,14,'gold',1,{al:'right'}),T('WLAN · 2,4 GHz',50,150,13,'txt',1,{al:'left'}),T('12,5 cm',350,150,14,'gold',1,{al:'right'}),T('WLAN · 5 GHz',50,195,13,'txt',1,{al:'left'}),T('6 cm',350,195,14,'gold',1,{al:'right'})],1),
+ S('Die Einheiten: Kilohertz (kHz) = Tausend, Megahertz (MHz) = Millionen, Gigahertz (GHz) = Milliarden Schwingungen pro Sekunde.',[P('1 kHz = 1.000 Hz',200,70,'blue'),P('1 MHz = 1.000.000 Hz',200,115,'a'),P('1 GHz = 1.000.000.000 Hz',200,160,'gold')],1)
+],info:{was:'Frequenz = Anzahl der Schwingungen pro Sekunde (Einheit Hertz). Wellenlänge = Länge einer einzelnen Schwingung im Raum.',so:'Rechne mit der Faustformel: Wellenlänge in Metern = 300 ÷ Frequenz in MHz. Beispiel: 300 ÷ 600 MHz = 0,5 m.',bed:'Lange Wellen (niedrige Frequenz) kommen weit und gut durch Wände. Kurze Wellen (hohe Frequenz) tragen mehr Daten, haben aber weniger Reichweite.',tipp:'Merksatz: „Tief kommt weit, hoch ist schnell.“ Das gilt für Handynetz, WLAN und Radio gleichermaßen.'}},
+
+{id:'spektrum',a:'wellen',t:'Das Funkspektrum',steps:[
+ S('Alle Funkdienste teilen sich die Funkfrequenzen – das Spektrum. Jeder Dienst bekommt seinen eigenen Bereich, wie Spuren auf einer Straße.',[B(20,110,360,28,'mut','',{fa:.08}),T('TIEF',20,158,10,'mut',1,{al:'left'}),T('HOCH',380,158,10,'mut',1,{al:'right'}),A(70,158,330,158,'mut')]),
+ S('Unten liegen Radio und Fernsehen: UKW bei 87,5–108 MHz, Digitalradio DAB+ bei etwa 174–230 MHz und darüber das Antennenfernsehen DVB-T2.',[B(24,112,60,24,'blue','',{fa:.4}),P('UKW',54,90,'blue'),B(88,112,46,24,'#e879f9','',{fa:.4}),P('DAB+',111,62,'#e879f9'),B(138,112,50,24,'gold','',{fa:.4}),P('TV',163,90,'gold')]),
+ S('In der Mitte das Handynetz: von 700 MHz bis 2,6 GHz – und für 5G zusätzlich um 3,6 GHz.',[B(192,112,90,24,'a','',{fa:.45}),P('MOBILFUNK 0,7–2,6 GHz',236,62,'a'),B(286,112,22,24,'red','',{fa:.45}),P('5G',297,90,'red')]),
+ S('Dazwischen und darüber liegen freie Bänder: 2,4 GHz für WLAN und Bluetooth, 5 und 6 GHz für schnelles WLAN. Diese darf jeder ohne Lizenz nutzen.',[B(312,112,64,24,'green','',{fa:.45}),P('WLAN',344,90,'green'),P('FREI: 2,4 · 5 · 6 GHz',300,190,'green')]),
+ S('Wer welche Frequenz nutzen darf, regelt in Deutschland die Bundesnetzagentur. Mobilfunk-Frequenzen werden versteigert – die 5G-Auktion 2019 brachte 6,55 Milliarden Euro.',[E('🏛️',200,80,50),P('BUNDESNETZAGENTUR',200,140,'a'),T('5G-Auktion 2019: 6,55 Mrd. €',200,182,13,'gold',1)],1)
+],info:{was:'Das Funkspektrum ist der gesamte Bereich der Funkfrequenzen – eine knappe Ressource, die sich alle Dienste teilen müssen.',so:'UKW 87,5–108 MHz · DAB+ ca. 174–230 MHz · DVB-T2 470–694 MHz · Mobilfunk 700 MHz–2,6 GHz und 3,6 GHz · WLAN 2,4 / 5 / 6 GHz.',bed:'Würden zwei Sender dieselbe Frequenz am selben Ort nutzen, würden sie sich gegenseitig stören – deshalb wird das Spektrum genau aufgeteilt.',tipp:'Die frei nutzbaren Bänder (z. B. 2,4 GHz) sind sehr voll. Darum ist WLAN auf 2,4 GHz in Mehrfamilienhäusern oft langsam.'}},
+
+{id:'antenne',a:'wellen',t:'Die Antenne',steps:[
+ S('Eine Antenne wandelt elektrischen Strom in Funkwellen um – und beim Empfang wieder zurück in Strom.',[LN([[80,130],[192,130]],'a',{w:6}),LN([[208,130],[320,130]],'a',{w:6}),LN([[196,132],[196,200]],'mut',{w:2}),LN([[204,132],[204,200]],'mut',{w:2}),P('KABEL ZUM SENDER',200,214,'mut'),RAD(200,122,3,22,-140,-40,'a')]),
+ S('Die einfachste Antenne ist der Dipol: zwei Stäbe, zusammen etwa eine halbe Wellenlänge lang.',[LN([[80,110],[192,110]],'a',{w:6}),LN([[208,110],[320,110]],'a',{w:6}),A(80,150,320,150,'gold',{bi:1}),P('λ / 2',200,174,'gold'),P('DIPOL',200,50,'a')],1),
+ S('Deshalb sind Antennen für tiefe Frequenzen groß und für hohe Frequenzen winzig: ein UKW-Dipol ist etwa 1,5 m lang, eine WLAN-Antenne nur rund 6 cm.',[LN([[40,80],[360,80]],'blue',{w:6}),T('UKW 100 MHz → ca. 1,5 m',200,108,12,'blue',1),LN([[193,160],[207,160]],'green',{w:6}),T('WLAN 2,4 GHz → ca. 6 cm',200,188,12,'green',1)],1),
+ S('Im Handy stecken mehrere winzige Antennen – oft im Metallrahmen versteckt. Deshalb kann eine Hand oder eine dicke Hülle den Empfang schwächen.',[PH(200,120,2.2),P('ANTENNEN IM RAHMEN',200,28,'a'),A(130,40,170,72,'a'),A(270,40,230,72,'a'),P('HAND / HÜLLE DÄMPFT',200,208,'red')],1)
+],info:{was:'Die Antenne ist das Bindeglied zwischen Kabel und Luft: Sie strahlt Funkwellen ab oder fängt sie ein.',so:'Ihre Größe richtet sich nach der Wellenlänge: Ein Dipol ist etwa eine halbe Wellenlänge lang. Richtantennen bündeln die Energie in eine Richtung.',bed:'Hohe Frequenzen erlauben kleine Antennen – darum passen in ein Handy gleich mehrere davon (für 4G, 5G, WLAN, Bluetooth, GPS und NFC).',tipp:'Wenn der Empfang schlecht ist, halte das Handy nicht am unteren Rand fest – dort sitzen oft die Hauptantennen.'}},
+
+{id:'modulation',a:'wellen',t:'Modulation: Infos auf der Welle',steps:[
+ S('Eine reine Welle trägt noch keine Information. Erst wenn man sie verändert – „moduliert“ –, kann sie Sprache oder Daten transportieren.',[T('TRÄGERWELLE',200,50,11,'mut',1),WV(30,370,125,30,24,'mut')]),
+ S('AM – Amplitudenmodulation: Die Stärke der Welle ändert sich im Takt der Musik. So funktionierte das alte Mittelwellen-Radio.',[P('AM · STÄRKE ÄNDERT SICH',200,34,'blue'),WV(30,370,135,42,14,'blue',{am:170})],1),
+ S('FM – Frequenzmodulation: Die Stärke bleibt gleich, aber die Schwingungen werden mal dichter, mal weiter. So arbeitet UKW-Radio – mit weniger Rauschen.',[P('FM · FREQUENZ ÄNDERT SICH',200,34,'gold'),WV(30,370,135,34,30,'gold',{fm:170})],1),
+ S('Digital: Heute werden Nullen und Einsen übertragen. Jeder Zustand der Welle steht für mehrere Bits – bei 16-QAM sind es 4 Bits, bei 256-QAM sogar 8.',[T('1 0 1 1 · 0 0 1 0',200,34,16,'a',1),...[0,1,2,3].flatMap(i=>[0,1,2,3].map(j=>D(167+i*22,82+j*22,4.5,'a'))),LN([[150,115],[250,115]],'mut',{w:1}),LN([[200,65],[200,165]],'mut',{w:1}),P('JEDER PUNKT = 4 BITS',200,205,'a')],1)
+],info:{was:'Modulation heißt: Die Information wird auf eine Trägerwelle „aufgeprägt“, indem man Amplitude, Frequenz oder Phase verändert.',so:'AM = Stärke ändert sich (Mittelwelle). FM = Frequenz ändert sich (UKW). Digital = viele Zustände für Bits (QAM, z. B. bei 4G, 5G, WLAN und DAB+).',bed:'Je mehr Bits pro Zustand (16-, 64-, 256-, 1024-QAM), desto schneller – aber umso besser muss der Empfang sein.',tipp:'Darum wird dein Handy bei schlechtem Empfang langsamer: Es schaltet automatisch auf robustere, aber langsamere Modulation um.'}},
+
+{id:'ausbreitung',a:'wellen',t:'Reichweite & Dämpfung',steps:[
+ S('Funkwellen werden schwächer, je weiter sie reisen. Bei doppelter Entfernung kommt nur noch ein Viertel der Leistung an.',[TW(50,205,100),RAD(50,105,5,22,-40,40,'a'),PH(190,150,1),PH(330,150,1),T('100 m',190,200,11,'txt',1),T('200 m',330,200,11,'txt',1),P('100 %',190,100,'green'),P('25 %',330,100,'red')]),
+ S('Hindernisse dämpfen zusätzlich: Holz lässt viel durch, Beton deutlich weniger, Metall fast gar nichts.',[WV(30,130,110,28,20,'a'),B(130,60,16,100,'gold','',{fa:.35}),WV(146,220,110,18,20,'a'),B(220,60,16,100,'mut','',{fa:.5}),WV(236,300,110,6,20,'a'),B(300,60,16,100,'blue','',{fa:.55}),WV(316,380,110,1.2,20,'a'),T('HOLZ',138,178,10,'gold',1),T('BETON',228,178,10,'mut',1),T('METALL',308,178,10,'blue',1)],1),
+ S('Wellen werden auch reflektiert – an Hauswänden, Bergen oder Fahrzeugen. So erreicht dich das Signal manchmal „um die Ecke“.',[TW(50,205,90),B(105,130,46,75,'mut','',{fa:.45}),B(270,30,80,100,'mut','HAUS',{fa:.2}),LN([[56,115],[104,150]],'red',{w:2,dash:1}),X(104,150,9),LN([[56,115],[270,95],[205,160]],'a',{w:2,dash:1}),PH(200,182,.9),P('REFLEXION',320,170,'a')],1),
+ S('Hohe Frequenzen (z. B. 3,6 GHz) werden stärker gedämpft als tiefe (z. B. 700 MHz). Deshalb versorgt ein Mast auf 700 MHz eine viel größere Fläche.',[LN(ARC(200,215,185,170,PI,2*PI),'blue',{w:2}),LN(ARC(200,215,85,78,PI,2*PI),'red',{w:2}),TW(200,215,40),P('700 MHz · WEIT',200,30,'blue'),P('3,6 GHz · KURZ',200,118,'red')],1)
+],info:{was:'Auf dem Weg vom Sender zum Empfänger verliert eine Funkwelle Energie – durch Entfernung, Hindernisse, Regen und Laub.',so:'Im freien Raum gilt: doppelte Entfernung = ein Viertel der Leistung. Dazu kommen Wände, metallbeschichtete Fenster, Bäume und Berge.',bed:'Netzbetreiber kombinieren tiefe Frequenzen für die Fläche und hohe Frequenzen für viel Kapazität in Städten.',tipp:'Moderne Wärmeschutzfenster haben eine hauchdünne Metallschicht – sie können den Handyempfang im Haus stark verschlechtern.'}},
+
+/* ---------- DAS HANDYNETZ ---------- */
+{id:'zellen',a:'mobil',t:'Funkzellen – das Wabennetz',steps:[
+ S('Ein Mobilfunknetz besteht aus vielen kleinen Gebieten – den Funkzellen. Jede Zelle wird von einer Antenne versorgt.',HEXC.map(([x,y])=>HX(x,y,34,'a','',{fa:.08}))),
+ S('Man zeichnet die Zellen als Waben (Sechsecke), weil sie die Fläche so lückenlos abdecken. In jeder Zelle funkt eine Antenne.',[...HEXC.map(([x,y])=>D(x,y,3.5,'a')),P('WABE = FUNKZELLE',200,222,'a')]),
+ S('Benachbarte Zellen nutzen unterschiedliche Frequenzen, damit sie sich nicht stören. Weiter entfernte Zellen können dieselbe Frequenz wiederverwenden.',HEXC.map(([x,y],i)=>HX(x,y,34,HCOL[HFREQ[i]],'F'+(HFREQ[i]+1),{fa:.2})),1),
+ S('Die Größe passt sich an: Auf dem Land kann eine Zelle viele Kilometer groß sein, in der Stadt nur wenige hundert Meter – weil dort viel mehr Menschen gleichzeitig surfen.',[HX(110,115,85,'a','LAND · KM',{fa:.12}),HX(290,95,20,'gold','',{fa:.2}),HX(325,95,20,'gold','',{fa:.2}),HX(272,125,20,'gold','',{fa:.2}),HX(307,125,20,'gold','',{fa:.2}),HX(342,125,20,'gold','',{fa:.2}),HX(290,155,20,'gold','',{fa:.2}),HX(325,155,20,'gold','',{fa:.2}),T('STADT · 100 m',307,200,12,'gold',1)],1)
+],info:{was:'Eine Funkzelle ist das Gebiet, das eine Antenne eines Mastes versorgt. Viele Zellen zusammen ergeben das Netz.',so:'Oft hat ein Mast drei Antennenfelder, die jeweils in eine Richtung (alle 120°) strahlen – ein Mast versorgt also drei Zellen (Sektoren).',bed:'Alle Handys in einer Zelle teilen sich deren Kapazität. Auf einem vollen Konzert oder im Stadion wird das Netz deshalb langsam.',tipp:'Bei Großveranstaltungen stellen Netzbetreiber mobile Masten auf, um zusätzliche Zellen zu schaffen.'}},
+
+{id:'mast',a:'mobil',t:'Der Sendemast',steps:[
+ S('Ein Mobilfunkmast trägt oben mehrere Antennenfelder. Meist sind es drei, die jeweils ein Drittel des Kreises – 120 Grad – abdecken.',[TW(200,215,150),P('ANTENNEN',300,58,'a'),A(268,62,212,66,'a')]),
+ S('Von oben gesehen: drei Sektoren, wie drei Tortenstücke. Jede Antenne versorgt ihre eigene Zelle.',[LN(ARC(200,125,95,95,0,2*PI,60),'mut',{w:1.5}),LN([[200,125],[200,30]],'mut',{w:1.5}),LN([[200,125],[282,172]],'mut',{w:1.5}),LN([[200,125],[118,172]],'mut',{w:1.5}),D(200,125,6,'txt'),P('ZELLE 1',254,96,'a'),P('ZELLE 2',200,186,'gold'),P('ZELLE 3',146,96,'green')],1),
+ S('Unten im Schrank sitzt die Technik: die Basisstation. Sie heißt bei 4G „eNodeB“ und bei 5G „gNodeB“.',[TW(110,215,150),B(210,150,150,60,'a','BASISSTATION',{fa:.15}),LN([[118,180],[210,180]],'mut',{w:2}),T('4G: eNodeB · 5G: gNodeB',285,188,10,'txt',1)],1),
+ S('Die Basisstation ist per Glasfaser oder Richtfunk mit dem Netz verbunden. Richtfunk erkennst du an den runden „Trommeln“ am Mast.',[TW(80,205,140),TW(330,205,140),D(94,100,9,'mut'),D(316,100,9,'mut'),LN([[103,100],[307,100]],'gold',{w:2,dash:1}),P('RICHTFUNK',205,80,'gold'),LN([[50,220],[360,220]],'blue',{w:3}),P('ODER GLASFASER IM BODEN',205,196,'blue')],1)
+],info:{was:'Ein Sendemast (Funkmast) trägt die Antennen. Unten oder daneben steht die Basisstation mit der Funktechnik und dem Netzanschluss.',so:'Typisch: drei rechteckige Antennenfelder pro Netzbetreiber. Runde, trommelartige Antennen sind Richtfunk zu einem anderen Mast.',bed:'Viele Masten werden von mehreren Betreibern gemeinsam genutzt. Antennen sitzen auch auf Dächern, Kirchtürmen oder Hochspannungsmasten.',tipp:'In der EMF-Datenbank der Bundesnetzagentur kannst du nachsehen, wo Funkanlagen in deiner Nähe stehen.'}},
+
+{id:'anruf',a:'mobil',t:'Der Weg eines Anrufs',steps:[
+ S('Du rufst an: Dein Handy funkt zur nächsten Basisstation. Das ist meist die einzige Strecke, die wirklich durch die Luft geht.',[PH(40,150,1.1),TW(130,205,100),RAD(56,136,3,14,-70,-10,'a'),P('FUNK',84,82,'a')]),
+ S('Von dort läuft das Gespräch per Glasfaser ins Kernnetz des Netzbetreibers – das Gehirn des Netzes.',[LN([[136,212],[175,212],[175,120],[190,120]],'blue',{w:3}),B(190,95,120,50,'a','KERNNETZ',{fa:.15}),T('Glasfaser',158,228,10,'blue',1)]),
+ S('Das Kernnetz prüft: Wer ruft an? Darf er telefonieren? Und in welcher Zelle ist der Angerufene gerade eingebucht?',[T('Wer? Darf er? Wo?',250,126,10,'txt',1),P('PRÜFT & VERMITTELT',250,168,'gold')]),
+ S('Dann wird die Verbindung zur Zelle des anderen Handys aufgebaut – auch in ein fremdes Netz oder ins Ausland. Alles in Sekundenbruchteilen.',[LN([[310,120],[322,120],[322,212],[334,212]],'blue',{w:3}),TW(340,205,95),RAD(340,110,3,14,30,90,'a'),PH(380,175,.8),P('IN SEKUNDENBRUCHTEILEN',200,28,'green')])
+],info:{was:'Nur der kurze Weg vom Handy zum Mast ist Funk. Der Großteil eines Gesprächs läuft durch Glasfaserkabel.',so:'Handy → Funk → Basisstation → Glasfaser → Kernnetz → (anderes Netz) → Basisstation → Funk → Handy.',bed:'Damit das klappt, meldet sich jedes Handy regelmäßig im Netz. So weiß das Netz immer ungefähr, wo du gerade bist.',tipp:'Heute läuft Telefonie meist über VoLTE (Telefonieren über 4G) oder VoNR (über 5G) – das klingt besser und verbindet schneller.'}},
+
+{id:'handover',a:'mobil',t:'Handover – Zellwechsel bei voller Fahrt',steps:[
+ S('Du telefonierst im Auto und fährst von einer Zelle in die nächste. Das Gespräch darf dabei nicht abbrechen.',[HX(110,118,82,'blue','',{fa:.06}),HX(290,118,82,'gold','',{fa:.06}),TW(110,150,40),TW(290,150,40),E('🚗',150,186,26)]),
+ S('Das Handy misst ständig, wie stark die eigene und die Nachbarzellen zu empfangen sind, und meldet das dem Netz.',[P('A: STARK',110,56,'blue'),P('B: SCHWACH',290,56,'gold')]),
+ S('Wird die neue Zelle besser als die alte, übergibt das Netz das Gespräch blitzschnell an sie – das ist der Handover.',[HX(110,118,82,'blue','',{fa:.06}),HX(290,118,82,'gold','',{fa:.06}),TW(110,150,40),TW(290,150,40),E('🚗',250,186,26,{f:[150,186]}),P('A: SCHWACH',110,56,'blue'),P('B: STARK',290,56,'gold'),P('HANDOVER ✓',200,224,'green')],1),
+ S('Ein Handover dauert nur Millisekunden – du merkst davon nichts. Sogar im ICE mit 300 km/h funktioniert das.',[E('🚄',200,95,54),P('NUR MILLISEKUNDEN',200,158,'green'),T('auch bei 300 km/h',200,192,12,'mut',1)],1)
+],info:{was:'Handover ist die Übergabe einer laufenden Verbindung von einer Funkzelle zur nächsten.',so:'Das Handy misst die Signalstärke der Nachbarzellen und schickt Messberichte. Das Netz entscheidet, wann gewechselt wird.',bed:'Ohne Handover könnte man nur im Stillstand telefonieren. Er macht Mobilfunk erst „mobil“.',tipp:'Bricht ein Gespräch beim Fahren immer an derselben Stelle ab, liegt dort wahrscheinlich eine Versorgungslücke zwischen zwei Zellen.'}},
+
+{id:'sim',a:'mobil',t:'Die SIM-Karte',steps:[
+ S('Die SIM-Karte ist dein Ausweis im Mobilfunknetz. Auf ihr ist eine weltweit einmalige Teilnehmerkennung gespeichert, die IMSI.',[B(120,55,160,105,'a','',{fa:.12}),B(150,85,52,42,'gold','',{fa:.55}),T('SIM',245,106,18,'a',1),P('IMSI · WELTWEIT EINMALIG',200,195,'a')]),
+ S('Außerdem steckt ein geheimer Schlüssel darin. Beim Einbuchen stellt das Netz eine Rechenaufgabe – nur die echte SIM kennt die richtige Antwort.',[PH(55,120,1.2),B(250,90,110,60,'a','NETZ',{fa:.12}),A(245,108,90,108,'blue'),T('Aufgabe',168,96,10,'blue',1),A(90,140,245,140,'green'),T('Antwort ✓',168,156,10,'green',1),P('SCHLÜSSEL VERLÄSST NIE DIE SIM',200,205,'gold')],1),
+ S('Die SIM-Karten wurden immer kleiner: von Scheckkartengröße über Mini- und Micro- bis zur Nano-SIM.',[B(20,70,120,76,'mut','',{fa:.12}),B(175,98,35,21,'a','',{fa:.3}),B(250,100,21,17,'a','',{fa:.3}),B(320,102,17,12,'a','',{fa:.3}),T('Original',80,170,11,'txt',1),T('Mini',192,170,11,'txt',1),T('Micro',260,170,11,'txt',1),T('Nano',328,170,11,'txt',1)],1),
+ S('Heute gibt es die eSIM: einen fest eingebauten Chip, auf den das Profil zum Beispiel per QR-Code geladen wird – ganz ohne Plastikkarte.',[PH(130,115,2),E('📲',280,105,46),P('eSIM · PROFIL PER QR-CODE',200,210,'green')],1)
+],info:{was:'SIM steht für „Subscriber Identity Module“. Die Karte identifiziert dich gegenüber dem Netz und schützt vor Missbrauch.',so:'Auf der SIM: Teilnehmerkennung (IMSI), geheimer Schlüssel, Profil des Netzbetreibers. Mit der PIN schützt du sie vor fremder Nutzung.',bed:'Deine Telefonnummer gehört zur SIM bzw. zum eSIM-Profil, nicht zum Handy – so kannst du das Gerät wechseln und die Nummer behalten.',tipp:'Nach dreimal falscher PIN brauchst du die PUK – sie steht auf dem Kartenhalter der SIM. Gut aufbewahren!'}},
+
+{id:'betreiber',a:'mobil',t:'Netzbetreiber in Deutschland',steps:[
+ S('In Deutschland gibt es vier Unternehmen mit eigenem Mobilfunknetz: Telekom, Vodafone, O2 Telefónica und 1&1.',[P('TELEKOM',110,75,'#e20074'),P('VODAFONE',290,75,'red'),P('O2 TELEFÓNICA',110,145,'blue'),P('1&1',290,145,'gold')]),
+ S('1&1 ist der jüngste Netzbetreiber und baut sein Netz noch aus. Wo noch keine eigenen Masten stehen, nutzt 1&1 das Netz eines Partners (National Roaming).',[TW(100,205,90),TW(300,205,90),P('EIGENES NETZ',100,62,'gold'),P('PARTNERNETZ',300,62,'mut'),A(150,160,250,160,'gold',{bi:1})],1),
+ S('Viele Anbieter, etwa Discounter, haben gar kein eigenes Netz. Sie mieten Kapazität bei einem Netzbetreiber – die Funktechnik ist dieselbe.',[B(130,35,140,40,'a','NETZBETREIBER',{fa:.15}),A(170,80,90,140,'mut'),A(200,80,200,140,'mut'),A(230,80,310,140,'mut'),P('ANBIETER A',82,160,'mut'),P('ANBIETER B',200,160,'mut'),P('ANBIETER C',318,160,'mut'),T('gleiches Netz, anderer Preis',200,205,12,'gold',1)],1),
+ S('Welches Netz bei dir am besten ist, hängt stark vom Ort ab. Die Bundesnetzagentur veröffentlicht dazu Karten zur Netzabdeckung.',[E('🗺️',200,90,54),P('NETZ VOR ORT VERGLEICHEN',200,160,'green')],1)
+],info:{was:'Ein Netzbetreiber besitzt eigene Funkfrequenzen, Masten und ein eigenes Kernnetz.',so:'Eigene Netze: Telekom, Vodafone, O2 Telefónica und 1&1. Discounter-Marken nutzen eines dieser Netze.',bed:'Mit einem Discounter-Tarif bekommst du meist dasselbe Netz – manchmal aber mit begrenzter Geschwindigkeit oder ohne 5G.',tipp:'Vor einem Wechsel: Frag Nachbarn oder Kollegen, welches Netz bei dir zu Hause und auf dem Arbeitsweg gut funktioniert.'}},
+
+/* ---------- 1G BIS 6G ---------- */
+{id:'g1g2',a:'gen',t:'1G & 2G – vom Koffertelefon zur SMS',steps:[
+ S('1G war analog: In Deutschland gab es ab 1958 das A-Netz, später das B- und C-Netz. Die Geräte waren riesig und sehr teuer.',[E('☎️',90,110,54),T('1G · ANALOG',260,70,16,'a',1),T('A-, B- und C-Netz',260,104,13,'txt',1),T('Telefone im Kofferformat',260,132,12,'mut',1)]),
+ S('1992 kam 2G mit dem digitalen GSM-Standard: die D-Netze D1 (Telekom) und D2 (heute Vodafone). Damit wurde das Handy für alle bezahlbar.',[E('📱',90,110,50),T('2G · GSM · 1992',260,70,16,'a',1),P('D1 · D2 · SPÄTER E-NETZE',260,120,'gold')],1),
+ S('Mit 2G kam auch die SMS: höchstens 160 Zeichen pro Nachricht. Die erste SMS wurde 1992 verschickt – Text: „Merry Christmas“.',[B(90,60,220,90,'a','',{fa:.1}),T('Merry Christmas',200,105,18,'txt',1),P('MAX. 160 ZEICHEN',200,182,'gold')],1),
+ S('Für Daten war GSM sehr langsam: 9,6 kbit/s, mit GPRS und EDGE später bis etwa 200 kbit/s – genug für E-Mails, aber nicht für Videos.',[P('kbit/s',200,28,'mut'),BAR(80,200,50,20,'red','9,6','GSM'),BAR(175,200,50,45,'gold','ca. 50','GPRS'),BAR(270,200,50,100,'green','ca. 200','EDGE')],1)
+],info:{was:'Die erste Generation (1G) übertrug Sprache analog. Die zweite (2G, GSM) war das erste digitale Handynetz.',so:'GSM nutzt in Deutschland 900 und 1.800 MHz. Es brachte SIM-Karte, SMS und internationales Roaming.',bed:'GSM wurde in fast allen Ländern der Welt eingeführt. In Deutschland wird 2G noch für einfache Telefonate, Autos und Maschinen genutzt.',tipp:'Manche ältere Geräte (z. B. Hausnotruf, Alarmanlagen, Autos) funken nur über 2G. Prüfe, ob sie 4G können – 2G soll in den nächsten Jahren abgeschaltet werden.'}},
+
+{id:'g3',a:'gen',t:'3G – UMTS & das mobile Internet',steps:[
+ S('Im Jahr 2000 wurden die UMTS-Frequenzen versteigert – für rund 50 Milliarden Euro. Bis heute die teuerste Frequenzauktion in Deutschland.',[T('UMTS-AUKTION 2000',200,62,14,'a',1),T('≈ 50 Mrd. €',200,112,32,'gold',1)]),
+ S('Ab 2004 ging 3G an den Start. Mobiles Internet wurde endlich brauchbar: anfangs 384 kbit/s, mit HSPA später bis zu 42 Mbit/s.',[BAR(110,200,60,24,'gold','384 kbit/s','UMTS'),BAR(240,200,60,130,'green','42 Mbit/s','HSPA+')],1),
+ S('2007 kam das erste iPhone, kurz darauf Android: Smartphones machten mobiles Internet zum Alltag.',[E('📱',140,105,56),E('🌐',265,105,50),A(175,105,228,105,'a'),P('SMARTPHONE-ÄRA',200,185,'a')],1),
+ S('3G wurde in Deutschland 2021 abgeschaltet. Die Frequenzen werden heute für 4G und 5G genutzt.',[T('3G',200,100,50,'mut',1),X(200,100,40),P('ABGESCHALTET 2021',200,182,'red')],1)
+],info:{was:'3G (UMTS) war die dritte Mobilfunkgeneration – gebaut für mobiles Internet und Videotelefonie.',so:'UMTS nutzte vor allem 2.100 MHz. Mit HSPA (das „H“ oder „H+“ in der Statusleiste) wurde es deutlich schneller.',bed:'Mit 3G wurden Apps, Navi, Messenger und mobiles Surfen möglich – die Grundlage für das Smartphone.',tipp:'Siehst du „H+“ oder „3G“ in der Anzeige, bist du im Ausland – in Deutschland gibt es kein 3G mehr.'}},
+
+{id:'g4',a:'gen',t:'4G – LTE',steps:[
+ S('4G heißt LTE (Long Term Evolution). In Deutschland startete es 2010 – zuerst auf dem Land, um dort schnelles Internet zu bringen.',[T('4G · LTE',200,70,30,'a',1),P('START 2010',200,128,'gold'),E('🌾',120,185,28),E('🏡',200,185,28),E('🌾',280,185,28)]),
+ S('LTE überträgt Daten auf sehr vielen schmalen Unterträgern gleichzeitig (OFDM) – wie eine Autobahn mit vielen Spuren.',Array.from({length:12},(_,i)=>B(40+i*27,70,22,80,'a','',{fa:.25})).concat([P('VIELE UNTERTRÄGER = OFDM',200,190,'a')]),1),
+ S('Dazu kommt MIMO: Mehrere Antennen senden gleichzeitig verschiedene Daten. 2 × 2 MIMO verdoppelt ungefähr die Geschwindigkeit.',[TW(70,205,100),PH(330,140,1.4),A(84,104,310,122,'a'),A(84,122,310,152,'gold'),P('2 × 2 MIMO',200,48,'a')],1),
+ S('Typisch sind 50 bis über 300 Mbit/s. Telefoniert wird über LTE mit VoLTE – in HD-Sprachqualität.',[P('Mbit/s',200,28,'mut'),BAR(110,200,60,55,'a','50','typisch'),BAR(240,200,60,140,'green','300+','LTE-Advanced')],1)
+],info:{was:'4G/LTE ist die vierte Generation – das erste Netz, das komplett auf Datenübertragung (IP) ausgelegt ist, auch für Sprache.',so:'LTE nutzt in Deutschland vor allem 800, 1.800 und 2.600 MHz. In der Statusleiste steht „4G“, „LTE“ oder „4G+“.',bed:'LTE ist bis heute das Rückgrat des Mobilfunks und erreicht nahezu alle Haushalte in Deutschland.',tipp:'„4G+“ bedeutet Carrier Aggregation: Das Handy bündelt mehrere Frequenzbänder gleichzeitig und wird dadurch schneller.'}},
+
+{id:'g5',a:'gen',t:'5G – schnell, direkt, massenhaft',steps:[
+ S('5G ist die aktuelle Generation. Sie hat drei Ziele: sehr hohe Geschwindigkeit, extrem kurze Reaktionszeit und Millionen vernetzte Geräte.',[P('SCHNELL',100,70,'a'),P('REAKTIONSSCHNELL',290,70,'gold'),P('MASSENHAFT',200,130,'green'),T('5G',200,195,30,'a',1)]),
+ S('Geschwindigkeit: Theoretisch sind mehrere Gigabit pro Sekunde möglich. In der Praxis sind einige hundert Mbit/s üblich.',[P('Mbit/s (Spitze)',110,30,'mut'),BAR(110,200,60,65,'gold','300','4G'),BAR(240,200,60,150,'a','1.000+','5G')],1),
+ S('Reaktionszeit (Latenz): Bei 5G sind wenige Millisekunden möglich – wichtig für Industrie-Roboter, vernetzte Autos und Fernsteuerung.',[T('LATENZ',200,40,12,'mut',1),P('4G: ca. 20–40 ms',200,82,'gold'),P('5G: bis wenige ms',200,122,'a'),E('🤖',120,185,30),E('🚗',200,185,30),E('🏭',280,185,30)],1),
+ S('Beamforming: 5G-Antennen bündeln das Signal wie einen Scheinwerfer gezielt auf dein Handy, statt rundherum zu strahlen.',[TW(60,210,120),LN([[66,92],[300,62]],'a',{w:2}),LN([[66,92],[300,100]],'a',{w:2}),PH(322,82,1),LN([[66,92],[300,162]],'gold',{w:2}),LN([[66,92],[300,198]],'gold',{w:2}),PH(322,180,1),P('BEAMFORMING',180,226,'a')],1)
+],info:{was:'5G ist die fünfte Mobilfunkgeneration. In Deutschland läuft sie seit 2019/2020 – vor allem auf 700 MHz, 2,1 GHz und 3,6 GHz.',so:'In der Statusleiste steht „5G“. Echtes „5G Standalone“ hat ein eigenes 5G-Kernnetz und bringt erst die ganz kurzen Reaktionszeiten.',bed:'Unternehmen dürfen in Deutschland eigene 5G-Campusnetze betreiben (Frequenzen 3,7–3,8 GHz) – zum Beispiel für Roboter und Logistik in Fabriken.',tipp:'5G braucht ein 5G-fähiges Handy und einen Tarif mit 5G. Bei manchen günstigen Tarifen ist 5G nicht enthalten.'}},
+
+{id:'baender',a:'gen',t:'Frequenzbänder: Reichweite oder Tempo',steps:[
+ S('Netzbetreiber nutzen verschiedene Frequenzbänder. Tiefe Bänder wie 700 und 800 MHz reichen weit und kommen gut ins Haus.',[LN(ARC(200,215,190,175,PI,2*PI),'blue',{w:2.2}),TW(200,215,30),P('700/800 MHz · FLÄCHE',200,24,'blue')]),
+ S('Mittlere Bänder wie 1.800 und 2.100 MHz sind ein Kompromiss aus Reichweite und Kapazität.',[LN(ARC(200,215,125,112,PI,2*PI),'gold',{w:2.2}),P('1,8 / 2,1 GHz',200,90,'gold')]),
+ S('Hohe Bänder wie 2.600 und 3.600 MHz haben wenig Reichweite, aber sehr viel Kapazität – ideal für Städte, Bahnhöfe und Stadien.',[LN(ARC(200,215,62,55,PI,2*PI),'red',{w:2.2}),P('3,6 GHz',200,138,'red')]),
+ S('Je breiter ein Frequenzblock (in MHz), desto mehr Daten passen gleichzeitig durch – wie bei einem breiteren Rohr mehr Wasser fließt.',[B(40,55,320,16,'blue','',{fa:.45}),T('10 MHz breit → wenig Daten',200,90,12,'blue',1),B(40,120,320,60,'a','',{fa:.35}),T('100 MHz breit → viele Daten',200,200,12,'a',1)],1)
+],info:{was:'Ein Frequenzband ist ein Bereich im Spektrum, den ein Netzbetreiber für Mobilfunk nutzen darf.',so:'Fläche: 700, 800, 900 MHz · Allround: 1.800, 2.100 MHz · Kapazität: 2.600, 3.600 MHz.',bed:'Dein Handy wechselt ständig automatisch das Band – je nachdem, was gerade den besten Empfang und das meiste Tempo bringt.',tipp:'Im Keller hast du oft nur noch das tiefe 800-MHz-Band – darum ist dort zwar Empfang, aber das Internet ist langsamer.'}},
+
+{id:'g6',a:'gen',t:'Ausblick: 6G',steps:[
+ S('Forscher und Firmen arbeiten bereits an 6G. Es soll um das Jahr 2030 kommen.',[T('6G',200,90,54,'a',1),P('CA. 2030',200,162,'gold')]),
+ S('6G soll noch höhere Frequenzen nutzen – bis in Richtung Terahertz. Damit wären theoretisch über 100 Gbit/s möglich, aber nur auf kurze Distanz.',[P('BIS IN RICHTUNG TERAHERTZ',200,62,'a'),T('> 100 Gbit/s (Ziel)',200,112,20,'gold',1),T('aber sehr kurze Reichweite',200,158,12,'mut',1)],1),
+ S('Ideen für 6G: Netz und KI wachsen zusammen, Funk „sieht“ wie ein Radar die Umgebung, und Satelliten werden fester Teil des Netzes.',[E('🧠',90,95,40),E('📡',200,95,40),E('🛰️',310,95,40),P('KI',90,155,'a'),P('FUNK-RADAR',200,155,'gold'),P('SATELLIT',310,155,'green')],1)
+],info:{was:'6G ist die geplante sechste Mobilfunkgeneration. Die Standards werden gerade weltweit entwickelt.',so:'Ziele: noch mehr Tempo, noch kürzere Latenz, weniger Energieverbrauch, Satellitenanbindung und Sensorik (Funk als Radar).',bed:'Bisher kam etwa alle zehn Jahre eine neue Generation: 1992 (2G), 2004 (3G), 2010 (4G), 2019 (5G) – 6G passt in diesen Takt.',tipp:'Alle Angaben zu 6G sind Pläne und Ziele – was am Ende wirklich kommt, entscheidet sich in den nächsten Jahren.'}},
+
+/* ---------- WLAN & NAHFUNK ---------- */
+{id:'wlan',a:'nah',t:'WLAN – Funk im Haus',steps:[
+ S('WLAN verbindet deine Geräte drahtlos mit dem Router. Der Router hängt am Internetanschluss – zum Beispiel DSL, Kabel oder Glasfaser.',[RT(200,130,1.4),RAD(200,96,3,18,-150,-30,'a'),LN([[200,145],[200,205]],'blue',{w:3}),P('INTERNETANSCHLUSS',200,220,'blue'),PH(70,120,1),E('💻',330,120,36)]),
+ S('WLAN funkt auf 2,4 GHz, 5 GHz und – bei neuen Geräten – 6 GHz. Tiefere Frequenz: mehr Reichweite, höhere Frequenz: mehr Tempo.',[P('2,4 GHz · WEIT, ABER VOLL',200,70,'gold'),P('5 GHz · SCHNELLER',200,115,'a'),P('6 GHz · AM SCHNELLSTEN, KURZ',200,160,'green')],1),
+ S('Die WLAN-Generationen heißen Wi-Fi 4, 5, 6 und 7. Jede neue Version ist schneller und kommt besser mit vielen Geräten gleichzeitig klar.',[BAR(50,200,50,30,'mut','Wi-Fi 4','2009'),BAR(130,200,50,55,'blue','Wi-Fi 5','2013'),BAR(210,200,50,95,'a','Wi-Fi 6','2019'),BAR(290,200,50,140,'green','Wi-Fi 7','2024')],1),
+ S('Ein Mesh-System verteilt WLAN über mehrere Stationen im ganzen Haus. Sie arbeiten zusammen wie ein einziges Netz.',[LN([[60,205],[60,105],[200,40],[340,105],[340,205],[60,205]],'mut',{w:2}),RT(120,180,.8),RT(280,180,.8),RT(200,115,.8),LN([[120,172],[200,108],[280,172]],'a',{dash:1,w:1.5}),P('MESH',200,226,'a')],1)
+],info:{was:'WLAN (international „Wi-Fi“) ist ein lokales Funknetz für Wohnung, Büro oder Café.',so:'Router mit WLAN-Antennen · Funkbänder 2,4 / 5 / 6 GHz · Reichweite meist 10–30 m im Haus, je nach Wänden und Decken.',bed:'WLAN nutzt frei verfügbare Frequenzen – du brauchst keine Lizenz, teilst dir das Band aber mit allen Nachbarn.',tipp:'Stell den Router möglichst zentral und erhöht auf – nicht in den Keller, hinter den Fernseher oder in einen Schrank.'}},
+
+{id:'kanaele',a:'nah',t:'WLAN-Kanäle & Störungen',steps:[
+ S('Das 2,4-GHz-Band ist in Europa in 13 Kanäle aufgeteilt. Aber: Die Kanäle überlappen sich stark.',[...CH.map(c=>LN(ARC(chx(c),185,44,90,PI,2*PI,24),'mut',{w:1.2})),...CH.map(c=>T(String(c),chx(c),200,9,'mut',1)),T('2,4-GHz-BAND',200,30,11,'mut',1)]),
+ S('Nur wenige Kanäle stören sich nicht gegenseitig – zum Beispiel 1, 6 und 11 (in Europa auch 1, 5, 9 und 13).',[LN(ARC(chx(1),185,44,90,PI,2*PI,24),'a',{w:3}),LN(ARC(chx(6),185,44,90,PI,2*PI,24),'gold',{w:3}),LN(ARC(chx(11),185,44,90,PI,2*PI,24),'green',{w:3}),P('1 · 6 · 11 ÜBERLAPPEN NICHT',200,222,'a')]),
+ S('Funken viele Nachbarn auf demselben Kanal, müssen sich alle die Funkzeit teilen – das WLAN wird langsam.',[RT(200,125,1.1),RT(80,70,.8),RT(320,70,.8),RT(80,180,.8),RT(320,180,.8),P('ALLE AUF KANAL 6',200,222,'red')],1),
+ S('Auch Mikrowelle, Babyfon und Bluetooth nutzen 2,4 GHz. Im 5-GHz-Band gibt es viel mehr Kanäle und weniger Störungen.',[E('🎧',100,90,36),E('👶',200,90,36),E('🍿',300,90,36),T('Bluetooth',100,135,12,'txt',1),T('Babyfon',200,135,12,'txt',1),T('Mikrowelle',300,135,12,'txt',1),P('5 GHz: MEHR PLATZ',200,190,'green')],1)
+],info:{was:'Ein Kanal ist ein schmaler Frequenzbereich innerhalb eines WLAN-Bandes. Router und Geräte einigen sich auf einen Kanal.',so:'Im 2,4-GHz-Band ist jeder Kanal rund 20 MHz breit, die Kanäle liegen aber nur 5 MHz auseinander – deshalb überlappen sie.',bed:'Viele moderne Router wählen den Kanal automatisch. Bei Problemen hilft manchmal ein manueller Wechsel.',tipp:'Mit einer WLAN-Analyse-App siehst du, welche Kanäle die Nachbarn belegen – und kannst einen freieren wählen.'}},
+
+{id:'bluetooth',a:'nah',t:'Bluetooth',steps:[
+ S('Bluetooth verbindet Geräte auf kurze Entfernung: Kopfhörer, Uhr, Lautsprecher oder das Auto mit dem Handy.',[PH(200,120,1.6),LN([[180,100],[95,72]],'a',{dash:1,w:1.5}),LN([[220,100],[305,72]],'a',{dash:1,w:1.5}),LN([[180,140],[95,172]],'a',{dash:1,w:1.5}),LN([[220,140],[305,172]],'a',{dash:1,w:1.5}),E('🎧',80,68,34),E('⌚',320,68,34),E('🔊',80,178,34),E('🚗',320,178,34)]),
+ S('Bluetooth funkt auf 2,4 GHz und springt dabei bis zu 1.600-mal pro Sekunde zwischen 79 Kanälen hin und her. Das macht es robust gegen Störungen.',[LN(HOP,'a',{w:1.5}),...HOP.map(([x,y])=>D(x,y,4.5,'gold')),T('KANAL',20,30,10,'mut',1,{al:'left'}),T('ZEIT →',380,224,10,'mut',1,{al:'right'}),P('FREQUENZSPRUNG',250,30,'a')],1),
+ S('Die Reichweite liegt meist bei etwa 10 Metern, mit stärkeren Geräten auch mehr. Bluetooth Low Energy (BLE) verbraucht besonders wenig Strom.',[PH(60,120,1.2),RAD(80,120,4,20,-60,60,'a'),T('ca. 10 m',230,110,18,'gold',1),P('BLE = SEHR SPARSAM',250,180,'green')],1),
+ S('Der Name stammt vom Wikingerkönig Harald Blauzahn, der Dänemark und Norwegen vereinte – so wie Bluetooth Geräte verbindet.',[E('👑',200,85,50),T('HARALD „BLAUZAHN“',200,148,14,'txt',1),T('10. Jahrhundert',200,178,12,'mut',1)],1)
+],info:{was:'Bluetooth ist ein Nahfunk-Standard für die Verbindung von Geräten über kurze Strecken.',so:'Geräte werden einmal gekoppelt („Pairing“) und verbinden sich danach automatisch. Aktuelle Versionen: Bluetooth 5.x mit LE Audio.',bed:'BLE steckt in Fitness-Trackern, Schlüsselfindern, Fahrradcomputern und vielen Smart-Home-Geräten – oft hält eine Knopfzelle monatelang.',tipp:'Schalte Bluetooth aus, wenn du es nicht brauchst – das spart Akku und verhindert, dass fremde Geräte dich anfunken.'}},
+
+{id:'nfc',a:'nah',t:'NFC & RFID',steps:[
+ S('NFC (Near Field Communication) funktioniert nur auf wenige Zentimeter – du hältst das Handy fast direkt an das Gerät. Es funkt auf 13,56 MHz.',[PH(130,120,1.6),B(215,90,110,60,'a','KARTENLESER',{fa:.12}),A(160,120,210,120,'a',{bi:1}),P('WENIGE cm',185,195,'gold')]),
+ S('Damit bezahlst du kontaktlos an der Kasse, öffnest Türen oder liest den Chip im Personalausweis aus.',[E('💳',90,100,40),E('🚪',200,100,40),E('🪪',310,100,40),T('Bezahlen',90,150,12,'txt',1),T('Türöffner',200,150,12,'txt',1),T('Ausweis',310,150,12,'txt',1)],1),
+ S('Viele RFID-Chips haben gar keine Batterie: Das Lesegerät erzeugt ein Feld, das den Chip mit Strom versorgt – dann antwortet der Chip mit seiner Nummer.',[B(30,80,100,70,'a','LESEGERÄT',{fa:.12}),RAD(130,115,4,12,-60,60,'a'),B(250,95,70,40,'gold','CHIP',{fa:.2}),A(246,165,140,165,'green',{dash:1}),T('Antwort: Nummer',193,180,10,'green',1),P('KEINE BATTERIE NÖTIG',200,212,'gold')],1),
+ S('RFID begegnet dir überall: im Skipass, beim Diebstahlschutz im Laden, im Haustier-Chip oder im Werksausweis.',[E('🎿',80,100,36),E('🛒',160,100,36),E('🐕',240,100,36),E('🏭',320,100,36),P('RFID IST ÜBERALL',200,170,'a')],1)
+],info:{was:'NFC und RFID sind Funktechniken für sehr kurze Entfernungen, bei denen ein Lesegerät einen Chip ausliest.',so:'NFC: 13,56 MHz, wenige Zentimeter, im Handy eingebaut. RFID: viele Varianten, teils mehrere Meter Reichweite (z. B. in der Logistik).',bed:'Die kurze Reichweite ist bei NFC ein Sicherheitsmerkmal: Niemand kann aus der Ferne unbemerkt bezahlen.',tipp:'Beim Bezahlen mit dem Handy wird nicht deine echte Kartennummer übertragen, sondern eine Ersatznummer (Token).'}},
+
+{id:'wlansicher',a:'nah',t:'WLAN-Sicherheit',steps:[
+ S('Funk geht durch Wände – auch zum Nachbarn. Darum muss ein WLAN immer verschlüsselt sein.',[B(195,40,14,150,'mut','',{fa:.45}),RT(90,135,1.1),RAD(90,112,5,26,-55,55,'a'),E('🕵️',320,120,40),P('FUNK ENDET NICHT AN DER WAND',200,220,'red')]),
+ S('Nutze WPA3 oder mindestens WPA2. Ältere Verfahren wie WEP sind unsicher und schnell geknackt.',[P('WPA3 · AM BESTEN',200,70,'green'),P('WPA2 · OK',200,115,'gold'),P('WEP / OFFEN · UNSICHER',200,160,'red')],1),
+ S('Ein langes WLAN-Passwort ist der beste Schutz – mindestens 12 bis 20 Zeichen. Ändere auch das Router-Kennwort ab Werk.',[E('🔑',70,100,40),T('Kaffee-Brücke-Wolke-27!',235,100,14,'txt',1),P('LANG SCHLÄGT KOMPLIZIERT',235,155,'gold')],1),
+ S('Weitere Tipps: WPS ausschalten, Router-Updates einspielen und für Besuch ein eigenes Gäste-WLAN einrichten.',[K(70,70,13),T('WPS ausschalten',95,70,14,'txt',1,{al:'left'}),K(70,115,13),T('Updates installieren',95,115,14,'txt',1,{al:'left'}),K(70,160,13),T('Gäste-WLAN nutzen',95,160,14,'txt',1,{al:'left'})],1)
+],info:{was:'WLAN-Sicherheit schützt dein Netz davor, dass Fremde mitsurfen oder deine Daten mitlesen.',so:'Im Router einstellen: Verschlüsselung WPA3 (oder WPA2/WPA3-Mischbetrieb), langes Passwort, WPS aus, automatische Updates an.',bed:'Offene oder schwach gesicherte Netze machen deine Geräte angreifbar – und Fremde könnten deinen Anschluss missbrauchen.',tipp:'In öffentlichen WLANs (Hotel, Café) besser keine Bankgeschäfte – dafür lieber das mobile Internet nutzen.'}},
+
+/* ---------- RUNDFUNK & SATELLIT ---------- */
+{id:'radio',a:'weit',t:'Radio: UKW & DAB+',steps:[
+ S('UKW-Radio sendet seit den 1950er-Jahren analog mit Frequenzmodulation (FM) zwischen 87,5 und 108 MHz.',[TW(60,210,130),RAD(60,80,4,24,-50,50,'a'),E('📻',300,115,50),P('UKW · 87,5–108 MHz',300,185,'a')]),
+ S('DAB+ ist das Digitalradio: Mehrere Sender teilen sich einen Kanal (Multiplex) – in guter Qualität ohne Rauschen.',[B(70,60,260,90,'a','EIN DAB+-KANAL',{fa:.1}),B(85,88,50,44,'gold','S1',{fa:.3}),B(145,88,50,44,'gold','S2',{fa:.3}),B(205,88,50,44,'gold','S3',{fa:.3}),B(265,88,50,44,'gold','S4',{fa:.3}),P('VIELE SENDER · KEIN RAUSCHEN',200,190,'green')],1),
+ S('Bei DAB+ gibt es kein langsames Schlechterwerden: Entweder der Empfang ist sauber – oder er bricht ab („digitale Klippe“).',[LN([[50,200],[360,200]],'mut',{w:1.5}),LN([[50,200],[50,40]],'mut',{w:1.5}),LN([[50,60],[360,190]],'blue',{w:2.5}),LN([[50,55],[260,55],[262,198],[360,198]],'green',{w:2.5}),T('UKW',318,150,11,'blue',1),T('DAB+',150,42,11,'green',1),T('Entfernung →',360,222,10,'mut',1,{al:'right'}),T('Qualität',58,30,10,'mut',1,{al:'left'})],1),
+ S('Im Auto zeigt DAB+ zusätzlich Titel, Interpret und Verkehrsmeldungen an. Neue Autoradios müssen seit Ende 2020 Digitalradio empfangen können.',[E('🚗',95,105,50),B(160,75,200,60,'a','',{fa:.1}),T('♪ Titel – Interpret',260,95,11,'txt',1),T('Verkehr: A92 frei',260,118,11,'gold',1),P('PFLICHT IN NEUEN AUTORADIOS',200,185,'a')],1)
+],info:{was:'Radio wird über Funk an alle Empfänger gleichzeitig gesendet – das nennt man Rundfunk (Broadcast).',so:'UKW: analog, FM, 87,5–108 MHz, Senderwahl per Frequenz. DAB+: digital, ca. 174–230 MHz, Senderwahl per Name.',bed:'Ein einziger Sender versorgt Zehntausende Hörer – egal wie viele zuhören, das Netz wird nie „voll“.',tipp:'Für den besten DAB+-Empfang zu Hause: Radio ans Fenster stellen und die Teleskopantenne ganz ausziehen.'}},
+
+{id:'tv',a:'weit',t:'Fernsehen über Antenne: DVB-T2',steps:[
+ S('Fernsehen kann über Antenne, Kabel, Satellit oder Internet kommen. Über Antenne heißt das in Deutschland DVB-T2 HD.',[E('📺',200,95,56),P('ANTENNE · KABEL · SATELLIT · INTERNET',200,175,'a')]),
+ S('Große Sendetürme strahlen das Signal ins Land. Mit einer Zimmer- oder Dachantenne empfängst du viele Sender.',[TW(70,210,150),RAD(70,60,5,26,-30,40,'a'),E('🏠',310,170,44),P('DACH- ODER ZIMMERANTENNE',290,105,'gold')],1),
+ S('DVB-T2 nutzt den Bereich von 470 bis 694 MHz. Die Bänder bei 700 und 800 MHz waren früher Fernsehen – heute sind sie Mobilfunk.',[B(30,95,200,44,'gold','DVB-T2',{fa:.2}),T('470–694 MHz',130,126,10,'txt',1),B(240,95,130,44,'a','MOBILFUNK',{fa:.2}),T('700 / 800 MHz',305,126,10,'txt',1),P('DIGITALE DIVIDENDE',200,182,'a')],1),
+ S('Die Bilder werden stark komprimiert (HEVC). So passen mehrere HD-Sender in einen einzigen Kanal.',[E('🎞️',80,110,40),A(120,110,245,110,'a'),B(250,80,124,60,'a','1 KANAL',{fa:.1}),T('mehrere HD-Sender',312,118,9.5,'txt',1),P('KOMPRIMIERUNG (HEVC)',200,190,'gold')],1)
+],info:{was:'DVB-T2 HD ist das digitale Antennenfernsehen in Deutschland – seit 2017.',so:'Empfang mit Zimmer- oder Dachantenne. Öffentlich-rechtliche Sender sind frei empfangbar, private Sender in HD gibt es über das Zusatzangebot freenet TV.',bed:'Durch effizientere Technik wurden Frequenzen frei, die heute dem Mobilfunk – vor allem auf dem Land – zugutekommen.',tipp:'Ob du DVB-T2 an deinem Wohnort empfängst, zeigen die Empfangsprognosen im Internet, z. B. bei freenet TV.'}},
+
+{id:'satellit',a:'weit',t:'Satelliten: 36.000 km über uns',steps:[
+ S('Fernsehsatelliten stehen scheinbar still am Himmel. Sie kreisen in rund 36.000 km Höhe genau so schnell, wie sich die Erde dreht – einmal in 24 Stunden.',[GL(80,140,58),LN(ARC(80,140,150,150,-1.1,1.1),'mut',{dash:1,w:1.5}),SAT(230,140,1),P('GEOSTATIONÄR · 35.786 km',290,36,'a')]),
+ S('Deshalb kann die Satellitenschüssel fest ausgerichtet bleiben. In Deutschland zeigen die meisten Schüsseln nach Süden auf ASTRA bei 19,2° Ost.',[E('🏠',90,175,50),E('📡',132,140,30),LN([[146,130],[318,58]],'a',{dash:1,w:1.5}),SAT(336,50,1),P('ASTRA 19,2° OST',290,112,'gold'),T('Blick nach Süden',290,205,12,'mut',1)],1),
+ S('Ein einzelner Satellit sieht fast ein Drittel der Erde. Mit drei Satelliten ließe sich fast die ganze Welt versorgen.',[GL(200,160,68),SAT(200,32,1),LN([[200,44],[136,140]],'a',{w:1.5,dash:1}),LN([[200,44],[264,140]],'a',{w:1.5,dash:1}),P('RIESIGE FLÄCHE',325,70,'a')],1),
+ S('Nachteil: Der Weg ist lang. Ein einfacher Weg über den Satelliten dauert etwa 0,25 Sekunden – eine Frage und ihre Antwort also rund eine halbe Sekunde.',[E('🏠',60,190,36),SAT(200,40,1),E('🏠',340,190,36),A(72,170,188,58,'a'),A(212,58,328,170,'a'),P('CA. 0,25 s PRO WEG',200,140,'gold')],1)
+],info:{was:'Ein geostationärer Satellit steht über dem Äquator in 35.786 km Höhe und bewegt sich synchron mit der Erddrehung.',so:'Erkennbar an fest montierten Schüsseln, die in Deutschland schräg nach Süden zeigen. Typische Frequenzen: 10,7–12,75 GHz.',bed:'Über Satellit kommen Hunderte TV- und Radiosender ins Haus – unabhängig von Kabel oder Internet.',tipp:'Starker Regen oder Schnee auf der Schüssel kann das Bild kurz stören – Signale um 11 GHz werden von Wasser gedämpft.'}},
+
+{id:'gps',a:'weit',t:'GPS & Navigation',steps:[
+ S('Navigationssatelliten (GPS, Galileo) kreisen in rund 20.000 bis 23.000 km Höhe. Jeder sendet ständig seine Position und die genaue Uhrzeit.',[GL(200,270,115),SAT(70,60,.9),SAT(160,36,.9),SAT(250,40,.9),SAT(335,66,.9),P('POSITION + UHRZEIT',200,105,'gold')]),
+ S('Dein Handy misst, wie lange jedes Signal unterwegs war. Daraus berechnet es den Abstand zu jedem Satelliten.',[LN([[70,70],[200,165]],'a',{dash:1,w:1.3}),LN([[160,46],[200,165]],'a',{dash:1,w:1.3}),LN([[250,50],[200,165]],'a',{dash:1,w:1.3}),LN([[335,76],[200,165]],'a',{dash:1,w:1.3}),D(200,165,5,'red')]),
+ S('Mit mindestens vier Satelliten bestimmt das Handy seine Position auf wenige Meter genau – drei für den Ort, einer zum Korrigieren der Uhrzeit.',[P('MINDESTENS 4 SATELLITEN',200,220,'green')]),
+ S('Die Zeit muss extrem genau sein: Eine Millionstel Sekunde Fehler bedeutet 300 Meter Abweichung. Deshalb haben die Satelliten Atomuhren an Bord.',[T('1 µs Fehler',200,75,22,'txt',1),T('= 300 m daneben',200,120,22,'red',1),P('ATOMUHREN AN BORD',200,178,'gold')],1)
+],info:{was:'Satellitennavigation bestimmt deine Position mit Signalen von Satelliten. Systeme: GPS (USA), Galileo (EU), GLONASS (Russland), BeiDou (China).',so:'Das Handy empfängt nur – es sendet nichts zum Satelliten. Darum funktioniert die Ortung auch ohne Netz (mit Offline-Karten sogar ganz ohne Datenvolumen).',bed:'Die genaue Satellitenzeit synchronisiert auch Handynetze, Stromnetze und Börsen weltweit.',tipp:'In Gebäuden ist GPS schwach. Handys nutzen dann zusätzlich WLAN und Mobilfunk, um den Standort zu schätzen.'}},
+
+{id:'leo',a:'weit',t:'Internet aus dem niedrigen Orbit',steps:[
+ S('Neue Satelliten-Netze wie Starlink fliegen viel tiefer: nur etwa 550 km hoch. Statt weniger großer Satelliten sind es viele Tausend kleine.',[GL(200,300,170),...[[40,120],[80,100],[125,86],[170,78],[215,76],[260,80],[305,90],[350,106],[60,70],[150,52],[240,50],[330,64]].map(([x,y])=>D(x,y,3.5,'a')),P('CA. 550 km · VIELE TAUSEND',200,24,'a')]),
+ S('Weil sie so tief fliegen, ist die Verzögerung kurz – ähnlich wie bei DSL. Dafür umrunden sie die Erde in etwa 90 Minuten und ziehen schnell vorbei.',[P('VERZÖGERUNG (PING)',200,28,'mut'),BAR(110,200,60,140,'red','ca. 600 ms','GEOSTATIONÄR'),BAR(240,200,60,18,'green','ca. 40 ms','NIEDRIGER ORBIT')],1),
+ S('Die flache Antenne auf dem Dach richtet ihr Signal elektronisch aus und springt automatisch von Satellit zu Satellit – wie ein Handover im Weltall.',[E('🏠',200,195,44),SAT(90,62,.9),SAT(200,40,.9),SAT(310,62,.9),LN([[200,172],[200,54]],'a',{w:1.6,dash:1}),A(118,78,172,52,'gold'),A(228,52,282,78,'gold'),P('HANDOVER IM ALL',200,120,'gold')],1),
+ S('Inzwischen funken erste Satelliten sogar direkt zum normalen Handy – für SMS und Notrufe dort, wo es kein Mobilfunknetz gibt.',[SAT(200,48,1.1),PH(200,170,1.3),LN([[200,62],[200,138]],'a',{dash:1,w:1.6}),E('🏔️',90,180,40),P('DIREKT ZUM HANDY',310,110,'green')],1)
+],info:{was:'LEO-Satelliten (Low Earth Orbit) kreisen in wenigen hundert Kilometern Höhe und bilden zusammen ein weltumspannendes Netz.',so:'Viele kleine Satelliten, kurze Verzögerung, Empfang über eine flache Antenne mit freier Sicht zum Himmel.',bed:'Ideal für abgelegene Höfe, Berghütten, Schiffe, Flugzeuge oder Katastrophengebiete ohne Kabel und Mobilfunk.',tipp:'Die Antenne braucht freie Sicht nach oben – Bäume und Dachkanten können den Empfang immer wieder kurz unterbrechen.'}},
+
+/* ---------- PRAXIS & SICHERHEIT ---------- */
+{id:'empfang',a:'praxis',t:'Empfang: Balken & dBm',steps:[
+ S('Die Balken auf dem Handy zeigen grob, wie stark das Signal ist. Aber jeder Hersteller rechnet sie etwas anders um.',[SB(200,150,4,4,'a'),P('4 VON 5 BALKEN',200,200,'a')]),
+ S('Genauer ist der Messwert in dBm. Er ist fast immer negativ: −70 dBm ist sehr gut, −100 dBm schwach, unter −115 dBm kaum noch nutzbar.',[B(40,95,100,30,'green','',{fa:.45}),B(140,95,110,30,'gold','',{fa:.45}),B(250,95,110,30,'red','',{fa:.45}),T('−70',40,145,11,'green',1,{al:'left'}),T('−100',250,145,11,'gold',1),T('−120 dBm',360,145,11,'red',1,{al:'right'}),P('SEHR GUT',90,72,'green'),P('MITTEL',195,72,'gold'),P('SCHWACH',305,72,'red')],1),
+ S('Dezibel sind ein logarithmisches Maß: 3 dB weniger halbiert die Leistung, 10 dB weniger bedeutet nur noch ein Zehntel.',[T('− 3 dB = ½ Leistung',200,75,18,'gold',1),T('− 10 dB = 1/10 Leistung',200,125,18,'red',1),T('− 20 dB = 1/100 Leistung',200,175,18,'red',1)],1),
+ S('Den genauen Wert findest du bei Samsung unter Einstellungen → Telefoninfo → Statusinformationen → SIM-Kartenstatus.',[PH(70,120,2),T('Einstellungen',140,62,12,'txt',1,{al:'left'}),T('→ Telefoninfo',140,88,12,'txt',1,{al:'left'}),T('→ Statusinformationen',140,114,12,'txt',1,{al:'left'}),T('→ SIM-Kartenstatus',140,140,12,'txt',1,{al:'left'}),T('Signalstärke: −87 dBm',140,178,13,'gold',1,{al:'left'})],1)
+],info:{was:'Die Signalstärke beschreibt, wie viel Funkleistung am Handy ankommt. Gemessen wird sie in dBm (Dezibel bezogen auf 1 Milliwatt).',so:'4G-Faustwerte: besser als −80 dBm sehr gut · −80 bis −100 dBm gut bis mittel · schlechter als −110 dBm schwach.',bed:'Neben der Stärke zählt die Qualität: Viele Nutzer oder Störungen machen das Netz auch bei vollen Balken langsam.',tipp:'Bei schwachem Empfang sendet das Handy mit mehr Leistung – das kostet Akku. Ein Platz am Fenster spart Strom.'}},
+
+{id:'funkloch',a:'praxis',t:'Funklöcher',steps:[
+ S('Ein Funkloch ist ein Ort ohne brauchbares Netz. Meist liegt das an zu wenigen Masten, an Bergen und Tälern oder an dichtem Wald.',[TW(60,205,100),RAD(60,105,3,26,-40,40,'a'),E('⛰️',210,160,80),PH(335,170,1),X(335,118,13),P('FUNKLOCH',335,218,'red')]),
+ S('Auch Gebäude wirken wie ein Funkloch: Keller, Tiefgaragen, Aufzüge und Hallen aus Stahlbeton schirmen Funk stark ab.',[E('🅿️',90,95,40),E('🛗',200,95,40),E('🏭',310,95,40),T('Tiefgarage',90,145,12,'txt',1),T('Aufzug',200,145,12,'txt',1),T('Stahlbetonhalle',310,145,12,'txt',1)],1),
+ S('Zu Hause hilft WLAN-Telefonie („WLAN Call“): Das Handy telefoniert dann über deinen Internetanschluss statt über den Mast.',[RT(140,140,1.2),RAD(140,100,3,16,-150,-30,'a'),PH(290,130,1.4),P('WLAN CALL',215,205,'green')],1),
+ S('Funklöcher melden: Mit der App „Breitbandmessung“ der Bundesnetzagentur kannst du Funklöcher erfassen – das hilft beim Netzausbau.',[E('📲',200,85,50),P('APP „BREITBANDMESSUNG“',200,155,'a'),T('Funkloch-Erfassung der Bundesnetzagentur',200,192,11,'mut',1)],1)
+],info:{was:'Funklöcher sind Gebiete, in denen kein oder nur sehr schwacher Mobilfunk verfügbar ist.',so:'Ursachen: fehlende Masten, Abschattung durch Gelände, Gebäude mit viel Metall und Beton, beschichtete Fenster.',bed:'Netzbetreiber haben Versorgungsauflagen der Bundesnetzagentur – z. B. für Autobahnen, Bundesstraßen und Bahnstrecken.',tipp:'Beim Notruf nutzt dein Handy notfalls jedes verfügbare Netz – auch das eines anderen Betreibers.'}},
+
+{id:'strahlung',a:'praxis',t:'Funkstrahlung & Grenzwerte',steps:[
+ S('Funkwellen sind nicht-ionisierende Strahlung: Sie haben zu wenig Energie, um Erbgut direkt zu schädigen – anders als Röntgen- oder UV-Strahlung.',[B(30,80,140,32,'green','FUNK',{fa:.25}),B(170,80,60,32,'gold','LICHT',{fa:.25}),B(230,80,140,32,'red','UV · RÖNTGEN',{fa:.25}),P('NICHT-IONISIEREND',100,140,'green'),P('IONISIEREND',300,140,'red'),A(40,185,360,185,'mut'),T('Energie →',360,205,10,'mut',1,{al:'right'})]),
+ S('Die nachgewiesene Wirkung von Funk ist Erwärmung. Damit sich das Gewebe nicht spürbar erwärmt, gibt es gesetzliche Grenzwerte mit großem Sicherheitsabstand.',[E('🌡️',110,105,50),P('ERWÄRMUNG',110,165,'gold'),P('GRENZWERTE + SICHERHEIT',280,105,'green')],1),
+ S('Für Handys gilt der SAR-Wert: Er gibt an, wie viel Funkenergie der Körper aufnimmt. Grenzwert in der EU für den Kopf: 2 Watt pro Kilogramm.',[PH(110,120,2),T('SAR',265,75,28,'a',1),T('max. 2,0 W/kg (Kopf)',265,120,13,'txt',1),P('STEHT IM DATENBLATT',265,168,'gold')],1),
+ S('Vorsorge-Tipps des Bundesamts für Strahlenschutz: Headset oder Lautsprecher nutzen, bei schlechtem Empfang kurz telefonieren und ein Handy mit niedrigem SAR-Wert wählen.',[K(55,70,13),T('Headset / Lautsprecher nutzen',80,70,13,'txt',1,{al:'left'}),K(55,115,13),T('Bei schlechtem Empfang kurz',80,115,13,'txt',1,{al:'left'}),K(55,160,13),T('Niedrigen SAR-Wert wählen',80,160,13,'txt',1,{al:'left'})],1)
+],info:{was:'Funkanlagen und Handys erzeugen elektromagnetische Felder. In Deutschland legt die 26. Bundes-Immissionsschutzverordnung (26. BImSchV) Grenzwerte fest.',so:'Mobilfunkanlagen brauchen eine Standortbescheinigung der Bundesnetzagentur. Den SAR-Wert eines Handys findest du in der Anleitung oder beim Hersteller.',bed:'Nach heutigem Wissensstand sind unterhalb der Grenzwerte keine gesundheitlichen Schäden nachgewiesen. Geforscht wird trotzdem weiter.',tipp:'Die meiste Funkenergie bekommst du vom eigenen Handy am Ohr, nicht vom Mast – vor allem bei schlechtem Empfang, weil das Handy dann stärker sendet.'}},
+
+{id:'notruf',a:'praxis',t:'Notruf 112 & Warnungen',steps:[
+ S('Die 112 funktioniert in ganz Europa kostenlos – auch bei gesperrtem Bildschirm. Ist dein eigenes Netz nicht da, nutzt das Handy ein anderes verfügbares Netz.',[T('112',200,88,50,'red',1),P('EUROPAWEIT · KOSTENLOS',200,150,'red'),T('auch über fremde Netze',200,185,12,'mut',1)]),
+ S('Wichtig: In Deutschland geht der Notruf nur mit einer gültigen SIM-Karte oder eSIM. Ohne SIM ist er seit 2009 nicht mehr möglich.',[B(130,55,140,95,'a','',{fa:.12}),B(155,82,48,40,'gold','',{fa:.55}),T('SIM',240,102,16,'a',1),P('SIM NÖTIG (SEIT 2009)',200,190,'gold')],1),
+ S('Beim Notruf schickt das Handy automatisch seinen genauen Standort an die Leitstelle (AML) – per GPS und WLAN, oft auf wenige Meter genau.',[PH(80,125,1.4),E('🚑',320,110,44),A(110,118,280,110,'red',{dash:1}),P('STANDORT AUTOMATISCH (AML)',200,195,'red')],1),
+ S('Cell Broadcast: Bei Gefahr (Unwetter, Hochwasser, Großbrand) schicken die Behörden eine Warnung an alle Handys in einer Funkzelle – laut, auch im Lautlos-Modus.',[TW(200,215,90),RAD(200,125,4,20,-180,0,'red'),PH(55,175,.9),PH(345,175,.9),PH(105,85,.9),PH(295,85,.9),P('⚠ WARNUNG AN ALLE',200,26,'red')],1)
+],info:{was:'Die 112 ist die europaweite Notrufnummer für Feuerwehr und Rettungsdienst. Die Polizei erreichst du in Deutschland unter 110.',so:'Ruhig bleiben und die W-Fragen beantworten: Wo ist es passiert? Was ist passiert? Wie viele Verletzte? Welche Verletzungen? Dann auf Rückfragen warten!',bed:'Cell Broadcast funktioniert ohne App und ohne Internet – auch, wenn das Netz stark ausgelastet ist.',tipp:'Zusätzlich warnen die Apps NINA und KATWARN – sie zeigen auch, was du jetzt tun sollst.'}},
+
+{id:'daten',a:'praxis',t:'Datenmengen & Tempo rechnen',steps:[
+ S('Internet-Tempo misst man in Bit pro Sekunde (Mbit/s), Dateigrößen in Byte (MB, GB). Dabei gilt: 1 Byte = 8 Bit.',[T('1 Byte = 8 Bit',200,75,26,'gold',1),P('TEMPO: Mbit/s',115,140,'a'),P('DATEI: MB / GB',285,140,'blue')]),
+ S('Rechenweg: Dauer in Sekunden = Datenmenge in Megabit ÷ Tempo in Mbit/s. Aus Megabyte werden Megabit, indem man mal 8 rechnet.',[T('Dauer = (MB × 8) ÷ Mbit/s',200,90,19,'gold',1),T('1 GB = 1.000 MB',200,140,14,'txt',1)],1),
+ S('Beispiel: Ein Film mit 4 GB bei 100 Mbit/s. 4.000 MB × 8 = 32.000 Mbit. 32.000 ÷ 100 = 320 Sekunden – also gut 5 Minuten.',[E('🎬',50,90,36),T('4.000 MB × 8 = 32.000 Mbit',230,70,14,'txt',1),T('32.000 ÷ 100 = 320 s',230,110,14,'txt',1),P('≈ 5 MINUTEN 20 SEKUNDEN',230,160,'green')],1),
+ S('Datenverbrauch (ungefähr): Musik-Streaming 50–150 MB pro Stunde, HD-Video 1,5–3 GB pro Stunde, Videoanruf 0,5–1 GB pro Stunde.',[T('Musik',50,60,13,'txt',1,{al:'left'}),T('50–150 MB/h',350,60,13,'gold',1,{al:'right'}),T('Video in HD',50,105,13,'txt',1,{al:'left'}),T('1,5–3 GB/h',350,105,13,'gold',1,{al:'right'}),T('Videoanruf',50,150,13,'txt',1,{al:'left'}),T('0,5–1 GB/h',350,150,13,'gold',1,{al:'right'}),T('Textnachrichten',50,195,13,'txt',1,{al:'left'}),T('kaum messbar',350,195,13,'green',1,{al:'right'})],1)
+],info:{was:'Ein Bit ist die kleinste Dateneinheit (0 oder 1), ein Byte besteht aus 8 Bit. Geschwindigkeiten gibt man in Bit, Dateigrößen in Byte an.',so:'Merke: 100 Mbit/s ≈ 12,5 MB pro Sekunde. Zum Umrechnen von Mbit/s in MB/s einfach durch 8 teilen.',bed:'Die angegebene Geschwindigkeit ist ein Höchstwert. Tatsächlich teilen sich alle Nutzer einer Zelle das Tempo.',tipp:'Lade große Updates und Filme zu Hause im WLAN – so schonst du dein mobiles Datenvolumen.'}},
+
+{id:'funkgeraete',a:'praxis',t:'Funkgeräte: PMR, CB & Amateurfunk',steps:[
+ S('Nicht jeder Funk braucht ein Netz: Funkgeräte sprechen direkt miteinander – ohne Mast, ohne SIM, ohne Gebühren.',[B(80,90,36,70,'a','',{fa:.25}),LN([[106,90],[106,48]],'a',{w:3}),B(284,90,36,70,'a','',{fa:.25}),LN([[294,90],[294,48]],'a',{w:3}),A(128,125,272,125,'gold',{bi:1}),P('DIREKT · OHNE NETZ',200,195,'gold')]),
+ S('PMR446: lizenzfrei, 446 MHz, kleine Handfunkgeräte mit 0,5 Watt. Reichweite meist 1 bis 3 km – auf Bergen deutlich mehr.',[T('PMR446',200,70,28,'a',1),P('LIZENZFREI · 0,5 W',200,122,'green'),T('Reichweite ca. 1–3 km',200,162,13,'txt',1)],1),
+ S('CB-Funk („Jedermannfunk“) auf 27 MHz kennt man von Lkw-Fahrern. Amateurfunk braucht eine Prüfung bei der Bundesnetzagentur – dafür funkt man um die ganze Welt.',[P('CB-FUNK · 27 MHz · JEDERMANN',200,55,'gold'),E('🚚',200,95,30),P('AMATEURFUNK · MIT PRÜFUNG',200,150,'a'),E('🌍',200,192,30)],1),
+ S('Polizei, Feuerwehr und Rettungsdienst nutzen ein eigenes, verschlüsseltes Netz: den BOS-Digitalfunk (TETRA).',[E('🚓',100,95,40),E('🚒',200,95,40),E('🚑',300,95,40),P('BOS-DIGITALFUNK (TETRA)',200,165,'a'),T('verschlüsselt',200,198,12,'mut',1)],1)
+],info:{was:'Funkgeräte übertragen Sprache direkt von Gerät zu Gerät. Je nach Art sind sie lizenzfrei (PMR446, CB-Funk) oder brauchen eine Prüfung (Amateurfunk).',so:'PMR446-Geräte haben eine fest eingebaute Antenne und 16 Kanäle. Alle Geräte auf demselben Kanal hören mit – es ist also nicht privat.',bed:'Bei Stromausfall oder Netzstörung funktionieren Funkgeräte mit Akku weiter – darum nutzt man sie auch im Katastrophenschutz.',tipp:'Für Ausflüge, Skifahren oder Baustellen sind PMR446-Geräte günstig und praktisch. Aber: nicht umbauen oder eine stärkere Antenne anschließen – das ist verboten.'}}
+];
+L.forEach((l,i)=>{l.i=i;});
+const byId=Object.fromEntries(L.map(l=>[l.id,l]));
+const areaOf=id=>AREAS.find(a=>a.id===id);
+const lessonsOf=aid=>L.filter(l=>l.a===aid);
+
+/* ============ Farben ============ */
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+let PAL={};
+function readPal(){PAL={txt:cssv('--tx'),mut:cssv('--mut'),gold:cssv('--gold'),green:cssv('--green'),red:cssv('--red'),blue:cssv('--blue'),cv:cssv('--cv'),grid:cssv('--grid'),card:cssv('--card'),line:cssv('--line')};}
+function dk(hex,f){hex=hex.replace('#','');const n=parseInt(hex,16),m=v=>Math.round(v*(1-f)).toString(16).padStart(2,'0');return '#'+m(n>>16&255)+m(n>>8&255)+m(n&255);}
+function rgba(hex,a){hex=String(hex).replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const n=parseInt(hex,16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
+const EMOJI='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif';
+const MONO=getComputedStyle(document.documentElement).getPropertyValue('--mono')||'monospace';
+
+/* ============ Zeichnen ============ */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=q=>q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function colr(k,ac){if(k==='a')return ac;if(PAL[k])return PAL[k];return(k[0]==='#'&&document.documentElement.dataset.theme==='light')?dk(k,.32):k;}
+function arrowHead(c,x1,y1,x2,y2,s){const an=Math.atan2(y2-y1,x2-x1);c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-s*Math.cos(an-.45),y2-s*Math.sin(an-.45));c.lineTo(x2-s*Math.cos(an+.45),y2-s*Math.sin(an+.45));c.closePath();c.fill();}
+
+function drawItem(c,it,q,ac){
+ if(it.st)q=1;
+ if(q<=0)return;
+ const col=colr(it.c||'a',ac);
+ let ox=0,oy=0;
+ if(it.f){ox=(it.f[0]-it.x)*(1-q);oy=(it.f[1]-it.y)*(1-q);}
+ c.save();
+ c.globalAlpha=it.f?Math.min(1,q*3):q;
+ c.translate(ox,oy);
+ switch(it.t){
+ case 'emo':{const s=it.f?1:(.55+.45*q);c.translate(it.x,it.y);c.scale(s,s);c.font=`${it.s}px ${EMOJI}`;c.textAlign='center';c.textBaseline='middle';c.fillStyle=PAL.txt;c.fillText(it.ch,0,it.s*.06);break;}
+ case 'pill':{c.font=`700 10px ${MONO}`;const w=c.measureText(it.tx).width+18,h=19;c.translate(it.x,it.y);const s=.8+.2*q;c.scale(s,s);rr(c,-w/2,-h/2,w,h,9.5);c.fillStyle=PAL.cv;c.fill();c.fillStyle=rgba(col,.16);c.fill();c.lineWidth=1.2;c.strokeStyle=col;c.stroke();c.fillStyle=col;c.textAlign='center';c.textBaseline='middle';c.fillText(it.tx,0,.5);break;}
+ case 'arr':{const x2=it.x1+(it.x2-it.x1)*q,y2=it.y1+(it.y2-it.y1)*q;c.strokeStyle=col;c.fillStyle=col;c.lineWidth=2;c.lineCap='round';if(it.dash)c.setLineDash([5,5]);c.beginPath();c.moveTo(it.x1,it.y1);c.lineTo(x2,y2);c.stroke();c.setLineDash([]);if(q>.85){arrowHead(c,it.x1,it.y1,x2,y2,8);if(it.bi)arrowHead(c,it.x2,it.y2,it.x1,it.y1,8);}break;}
+ case 'txt':{c.font=`${it.b?700:500} ${it.s}px ${it.b?MONO:'system-ui,sans-serif'}`;c.fillStyle=col;c.textAlign=it.al||'center';c.textBaseline='middle';c.fillText(it.tx,it.x,it.y+(1-q)*6);break;}
+ case 'box':{rr(c,it.x,it.y,it.w,it.h,Math.min(8,it.h/2.5,it.w/2.5));c.fillStyle=rgba(col,it.fa||.1);c.fill();c.lineWidth=1.4;c.strokeStyle=col;c.stroke();if(it.tx){c.font=`700 9.5px ${MONO}`;c.fillStyle=col;c.textAlign='center';c.textBaseline='top';c.fillText(it.tx,it.x+it.w/2,it.y+6);}break;}
+ case 'bar':{const h=it.h*q;rr(c,it.x,it.y-h,it.w,Math.max(h,1),4);c.fillStyle=rgba(col,.75);c.fill();c.strokeStyle=col;c.lineWidth=1.2;c.stroke();
+  c.textAlign='center';c.textBaseline='bottom';c.font=`800 12px ${MONO}`;c.fillStyle=col;if(q>.5)c.fillText(it.top,it.x+it.w/2,it.y-h-5);
+  c.textBaseline='top';c.font=`600 10px ${MONO}`;c.fillStyle=PAL.mut;c.fillText(it.bot,it.x+it.w/2,it.y+5);
+  c.strokeStyle=PAL.mut;c.globalAlpha*=.5;c.beginPath();c.moveTo(it.x-12,it.y);c.lineTo(it.x+it.w+12,it.y);c.stroke();break;}
+ case 'x':{const s=it.s*q;c.strokeStyle=PAL.red;c.lineWidth=4;c.lineCap='round';c.beginPath();c.moveTo(it.x-s,it.y-s);c.lineTo(it.x+s,it.y+s);c.moveTo(it.x+s,it.y-s);c.lineTo(it.x-s,it.y+s);c.stroke();break;}
+ case 'chk':{const s=it.s;c.translate(it.x,it.y);c.beginPath();c.arc(0,0,s,0,7);c.fillStyle=rgba(PAL.green,.18);c.fill();c.strokeStyle=PAL.green;c.lineWidth=2;c.stroke();c.lineWidth=3.5;c.lineCap='round';c.beginPath();c.moveTo(-s*.45,0);c.lineTo(-s*.1,s*.38);c.lineTo(s*.5,-s*.38);c.stroke();break;}
+ case 'line':{const pts=it.pts,n=pts.length-1,tot=q*n;c.strokeStyle=col;c.lineWidth=it.w||2.6;if(it.dash)c.setLineDash([5,4]);c.lineJoin='round';c.lineCap='round';c.beginPath();c.moveTo(pts[0][0],pts[0][1]);
+  for(let k=1;k<=n;k++){if(tot>=k)c.lineTo(pts[k][0],pts[k][1]);else{const f=tot-(k-1);if(f>0)c.lineTo(pts[k-1][0]+(pts[k][0]-pts[k-1][0])*f,pts[k-1][1]+(pts[k][1]-pts[k-1][1])*f);break;}}c.stroke();c.setLineDash([]);break;}
+ /* ---- Funk ---- */
+ case 'wave':{const x2=it.x1+(it.x2-it.x1)*q;c.strokeStyle=col;c.lineWidth=it.w||2.4;c.lineJoin='round';c.lineCap='round';c.beginPath();let ph=0;
+  for(let x=it.x1;x<=x2+.01;x+=1){const d=x-it.x1;let a=it.amp;if(it.am)a=it.amp*(.55+.45*Math.sin(2*Math.PI*d/it.am));const y=it.y-a*Math.sin(ph);x===it.x1?c.moveTo(x,y):c.lineTo(x,y);
+   const Lw=it.fm?it.len*(1+.65*Math.sin(2*Math.PI*d/it.fm)):it.len;ph+=2*Math.PI/Lw;}
+  c.stroke();break;}
+ case 'tower':{const h=it.h,x=it.x,y=it.y,w=Math.max(8,h*.17),tw=3;c.strokeStyle=PAL.txt;c.globalAlpha*=.85;c.lineWidth=2;c.lineCap='round';
+  c.beginPath();c.moveTo(x-w,y);c.lineTo(x-tw,y-h);c.moveTo(x+w,y);c.lineTo(x+tw,y-h);c.stroke();
+  c.lineWidth=1;c.beginPath();const n=Math.max(3,Math.round(h/16));for(let i=0;i<n;i++){const t0=i/n,t1=(i+1)/n,xl=t=>x-w+(w-tw)*t,xr=t=>x+w-(w-tw)*t;c.moveTo(xl(t0),y-h*t0);c.lineTo(xr(t1),y-h*t1);c.moveTo(xr(t0),y-h*t0);c.lineTo(xl(t1),y-h*t1);}c.stroke();
+  const pw=Math.max(4,h*.045),pl=Math.max(9,h*.15);c.fillStyle=PAL.mut;c.globalAlpha=Math.min(1,c.globalAlpha/.85);
+  rr(c,x-tw-pw-2,y-h-3,pw,pl,1.5);c.fill();rr(c,x+tw+2,y-h-3,pw,pl,1.5);c.fill();rr(c,x-pw/2,y-h-pl*.55,pw,pl*.75,1.5);c.fill();
+  c.fillStyle=PAL.red;c.beginPath();c.arc(x,y-h-pl*.55-3,2,0,7);c.fill();break;}
+ case 'phone':{const s=it.s,w=26*s,h=48*s,sc=it.f?1:(.75+.25*q);c.translate(it.x,it.y);c.scale(sc,sc);
+  rr(c,-w/2,-h/2,w,h,5*s);c.fillStyle=PAL.card;c.fill();c.lineWidth=1.6;c.strokeStyle=PAL.txt;c.stroke();
+  rr(c,-w/2+2.5*s,-h/2+5*s,w-5*s,h-10*s,2*s);c.fillStyle=rgba(col,.28);c.fill();
+  c.fillStyle=PAL.txt;c.beginPath();c.arc(0,-h/2+2.6*s,1.1*s,0,7);c.fill();
+  for(let k=0;k<4;k++){c.fillStyle=col;c.fillRect(-w/2+4*s+k*2.6*s,-h/2+8.5*s-(k+1)*1.1*s,1.8*s,(k+1)*1.1*s);}
+  break;}
+ case 'rad':{c.strokeStyle=col;c.lineWidth=it.w||2.2;c.lineCap='round';const base=c.globalAlpha>0?1:0;
+  for(let i=0;i<it.n;i++){const qq=clamp(q*it.n*1.15-i,0,1);if(qq<=0)break;c.globalAlpha=base*qq*(1-.45*i/it.n);c.beginPath();c.arc(it.x,it.y,it.gap*(i+1),it.a0*Math.PI/180,it.a1*Math.PI/180);c.stroke();}
+  break;}
+ case 'hex':{c.beginPath();for(let k=0;k<6;k++){const a=Math.PI/180*(60*k-90),px=it.x+it.r*Math.cos(a),py=it.y+it.r*Math.sin(a);k?c.lineTo(px,py):c.moveTo(px,py);}c.closePath();
+  c.fillStyle=rgba(col,it.fa||.12);c.fill();c.strokeStyle=col;c.lineWidth=1.4;c.stroke();
+  if(it.tx){c.font=`700 10px ${MONO}`;c.fillStyle=col;c.textAlign='center';c.textBaseline='middle';c.fillText(it.tx,it.x,it.y);}break;}
+ case 'router':{const s=it.s;c.translate(it.x,it.y);c.scale(s,s);c.strokeStyle=PAL.txt;c.lineWidth=2.5;c.lineCap='round';
+  c.beginPath();c.moveTo(-18,-8);c.lineTo(-24,-28);c.moveTo(18,-8);c.lineTo(24,-28);c.stroke();
+  rr(c,-32,-9,64,20,5);c.fillStyle=PAL.card;c.fill();c.lineWidth=1.6;c.stroke();
+  for(let k=0;k<4;k++){c.fillStyle=k<3?PAL.green:PAL.gold;c.beginPath();c.arc(-14+k*9,1,2.1,0,7);c.fill();}break;}
+ case 'sat':{const s=it.s;c.translate(it.x,it.y);c.scale(s,s);c.strokeStyle=PAL.blue;c.lineWidth=1;
+  for(const x0 of[-34,10]){c.fillStyle=rgba(PAL.blue,.5);c.fillRect(x0,-6,24,12);c.strokeRect(x0,-6,24,12);c.beginPath();for(let k=1;k<4;k++){c.moveTo(x0+k*6,-6);c.lineTo(x0+k*6,6);}c.stroke();}
+  c.strokeStyle=PAL.mut;c.lineWidth=1.5;c.beginPath();c.moveTo(-10,0);c.lineTo(10,0);c.stroke();
+  rr(c,-7,-8,14,16,2);c.fillStyle='#d4a017';c.fill();c.strokeStyle='#7a5a0e';c.lineWidth=1;c.stroke();
+  c.beginPath();c.arc(0,13,4.5,Math.PI,0);c.strokeStyle=PAL.txt;c.lineWidth=1.4;c.stroke();break;}
+ case 'sbars':{const s=it.s,x0=it.x-16.5*s;for(let k=0;k<5;k++){const bh=(5+k*5)*s;rr(c,x0+k*7*s,it.y-bh,5*s,bh,1.2*s);c.fillStyle=k<it.n?col:PAL.line;c.fill();}break;}
+ case 'globe':{c.beginPath();c.arc(it.x,it.y,it.r,0,7);const g=c.createRadialGradient(it.x-it.r*.3,it.y-it.r*.3,it.r*.1,it.x,it.y,it.r);g.addColorStop(0,'#5fa8e8');g.addColorStop(1,'#1d4f8a');c.fillStyle=g;c.fill();
+  c.save();c.clip();c.fillStyle=rgba('#4ade80',.55);[[-.3,-.2,.35,.22],[.25,.15,.3,.2],[-.1,.45,.25,.14],[.4,-.45,.2,.15],[-.55,.25,.18,.12]].forEach(b=>{c.beginPath();c.ellipse(it.x+b[0]*it.r,it.y+b[1]*it.r,b[2]*it.r,b[3]*it.r,.4,0,7);c.fill();});c.restore();break;}
+ case 'dot':{c.beginPath();c.arc(it.x,it.y,it.r*(it.f?1:(.5+.5*q)),0,7);c.fillStyle=col;c.fill();break;}
+ }
+ c.restore();
+}
+function sceneAt(les,si,p){
+ let start=0;for(let j=si;j>=0;j--){if(les.steps[j].clear){start=j;break;}}
+ const out=[];
+ for(let j=start;j<=si;j++){const add=les.steps[j].add,n=add.length;
+  add.forEach((it,i)=>{let q=1;if(j===si){const st=n>1?i/n*.55:0;q=clamp((p-st)/.3,0,1);}out.push([it,ease(q)]);});}
+ return out;
+}
+function paint(cv,les,si,p){
+ const dpr=Math.min(3,window.devicePixelRatio||1),w=cv.clientWidth||400,h=w*240/400;
+ if(cv.width!==Math.round(w*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+ const c=cv.getContext('2d'),k=cv.width/400;
+ c.setTransform(1,0,0,1,0,0);c.fillStyle=PAL.cv;c.fillRect(0,0,cv.width,cv.height);
+ c.setTransform(k,0,0,k,0,0);
+ c.strokeStyle=PAL.grid;c.lineWidth=1;c.beginPath();for(let x=20;x<400;x+=20){c.moveTo(x,0);c.lineTo(x,240);}for(let y=20;y<240;y+=20){c.moveTo(0,y);c.lineTo(400,y);}c.stroke();
+ let ac=areaOf(les.a).col;if(document.documentElement.dataset.theme==='light')ac=dk(ac,.32);
+ const items=sceneAt(les,si,p);
+ for(const [it,q] of items)if(it.t!=='pill')drawItem(c,it,q,ac);
+ for(const [it,q] of items)if(it.t==='pill')drawItem(c,it,q,ac);
+}
+
+/* ============ Thema ============ */
+const TKEY='funkschule-theme';
+let mode='dark';try{mode=localStorage.getItem(TKEY)||'dark';}catch(e){}
+const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+function applyTheme(){
+ const act=mode==='auto'?(mq&&mq.matches?'dark':'light'):mode;
+ document.documentElement.dataset.theme=act;
+ document.querySelector('meta[name=theme-color]').content=act==='dark'?'#070b10':'#eef2f6';
+ document.querySelectorAll('#theme button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+ readPal();redraw();
+}
+document.getElementById('theme').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;try{localStorage.setItem(TKEY,mode);}catch(_){}applyTheme();});
+if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{if(mode==='auto')applyTheme();});
+let redrawHooks=[];function redraw(){redrawHooks.forEach(f=>f());}
+window.addEventListener('resize',redraw);
+
+/* ============ Player ============ */
+const STEP=4200;
+let PL=null,raf=0;
+function stopPlayer(){if(raf)cancelAnimationFrame(raf);raf=0;PL=null;}
+function setupPlayer(les){
+ const cv=document.getElementById('cv'),n=les.steps.length,total=n*STEP;
+ PL={les,t:0,playing:true,speed:1,last:0};
+ const $=id=>document.getElementById(id);
+ const ui=()=>{
+  if(!PL)return;
+  const si=Math.min(n-1,Math.floor(PL.t/STEP)),p=PL.t>=total?1:clamp((PL.t-si*STEP)/STEP,0,1);
+  paint(cv,les,si,p);
+  $('sn').textContent=`SCHRITT ${si+1} / ${n}`;$('say').textContent=les.steps[si].say;
+  $('rg').value=Math.round(PL.t/total*1000);
+  const sec=x=>{x=Math.floor(x/1000);return Math.floor(x/60)+':'+String(x%60).padStart(2,'0');};
+  $('tm').textContent=sec(PL.t)+' / '+sec(total);
+  $('pb').textContent=PL.playing?'❚❚':(PL.t>=total?'↻':'▶');
+  document.querySelectorAll('#steps .sbtn').forEach((b,i)=>b.classList.toggle('on',i===si));
+  if(si===n-1&&p>.6&&!ST.seen[les.id]){ST.seen[les.id]=1;save();renderSide();}
+ };
+ const loop=ts=>{if(!PL)return;if(!PL.last)PL.last=ts;const dt=Math.min(100,ts-PL.last);PL.last=ts;
+  if(PL.playing){PL.t+=dt*PL.speed;if(PL.t>=total){PL.t=total;PL.playing=false;}}
+  ui();raf=PL.playing?requestAnimationFrame(loop):0;};
+ const play=()=>{if(!PL)return;if(PL.t>=total)PL.t=0;PL.playing=true;PL.last=0;if(!raf)raf=requestAnimationFrame(loop);};
+ const pause=()=>{PL.playing=false;ui();};
+ $('pb').onclick=()=>PL.playing?pause():play();
+ cv.onclick=()=>PL.playing?pause():play();
+ $('rs').onclick=()=>{PL.t=0;play();};
+ $('rg').oninput=e=>{PL.t=e.target.value/1000*total;if(!PL.playing)ui();};
+ document.querySelectorAll('#spd .sbtn').forEach(b=>b.onclick=()=>{PL.speed=+b.dataset.s;document.querySelectorAll('#spd .sbtn').forEach(x=>x.classList.toggle('on',x===b));});
+ document.querySelectorAll('#steps .sbtn').forEach((b,i)=>b.onclick=()=>{PL.t=i*STEP;play();});
+ redrawHooks=[ui];
+ raf=requestAnimationFrame(loop);
+}
+
+/* ============ Seitenleiste ============ */
+let q='';
+function renderSide(){
+ const el=document.getElementById('side');if(!el)return;
+ const cur=(location.hash.match(/#l-([\w-]+)/)||[])[1];
+ const ql=q.toLowerCase();
+ let h=`<input class="search" id="srch" placeholder="🔍 Lektion suchen …" value="${q.replace(/"/g,'&quot;')}">`;
+ for(const a of AREAS){
+  const ls=lessonsOf(a.id).filter(l=>!ql||(l.t+' '+l.steps.map(s=>s.say).join(' ')+' '+Object.values(l.info).join(' ')).toLowerCase().includes(ql));
+  if(!ls.length)continue;
+  h+=`<div class="sgrp" style="--ac:${a.col}"><h4>${a.icon} ${a.name.toUpperCase()}</h4>`+ls.map(l=>`<a href="#l-${l.id}" class="${l.id===cur?'act':''}">${l.t}${ST.seen[l.id]?'<span class="ck">✓</span>':''}</a>`).join('')+`</div>`;
+ }
+ h+=`<a class="sq" href="#quiz" style="color:${QUIZCOL};border-color:${QUIZCOL}">🎯 QUIZ STARTEN · BESTWERT ${ST.best}/10</a>`;
+ const had=document.activeElement&&document.activeElement.id==='srch',pos=had?document.activeElement.selectionStart:0;
+ el.innerHTML=h;
+ const s=document.getElementById('srch');s.oninput=e=>{q=e.target.value;renderSide();};
+ if(had){s.focus();s.setSelectionRange(pos,pos);}
+}
+
+/* ============ Ansichten ============ */
+const M=document.getElementById('main');
+function vHome(){
+ const seen=L.filter(l=>ST.seen[l.id]).length;
+ let h=`<section class="hero"><div class="kicker">BAYAZIT · LERN-APP · ${L.length} LEKTIONEN</div><h1>Funk <span>verstehen</span></h1><p>Wie Funkwellen funktionieren, wie dein Handy telefoniert, was 5G kann und wie WLAN, Bluetooth, Radio und GPS arbeiten – in kleinen Videos erklärt.</p>
+ <div class="chips"><span class="chip">FORTSCHRITT <b>${seen}/${L.length}</b></span><span class="chip">QUIZ-BESTWERT <b>${ST.best}/10</b></span><span class="chip">VON <b>1G → 6G</b></span></div></section><div class="bento">`;
+ AREAS.forEach((a,i)=>{const ls=lessonsOf(a.id),d=ls.filter(l=>ST.seen[l.id]).length;
+  h+=`<a class="tile" href="#b-${a.id}" style="--ac:${a.col}"><div class="ti-top"><span class="ti-ico">${a.icon}</span><span class="ti-num">0${i+1}</span></div><h2>${a.name.toUpperCase()}</h2><p>${a.desc}</p><div class="prog"><i style="width:${d/ls.length*100}%"></i></div><div class="ti-foot">${d}/${ls.length} LEKTIONEN</div></a>`;});
+ h+=`<a class="tile qz" href="#quiz" style="--ac:${QUIZCOL}"><div class="ti-top"><span class="ti-ico">🎯</span><span class="ti-num">QUIZ</span></div><h2>QUIZ</h2><p>10 zufällige Fragen: Bilder, Wissen und Rechenaufgaben.</p><div class="prog"><i style="width:${ST.best*10}%"></i></div><div class="ti-foot">BESTWERT ${ST.best}/10</div></a></div>`;
+ h+=`<div class="foot">📡 BAYAZIT FUNKNETZ-SCHULE · KOMPASS DARK<br><span style="opacity:.75;letter-spacing:0">Alle Angaben ohne Gewähr · Stand 2026</span></div>`;
+ M.innerHTML=h;
+}
+function vArea(aid){
+ const a=areaOf(aid);if(!a)return vHome();
+ const ls=lessonsOf(aid),d=ls.filter(l=>ST.seen[l.id]).length;
+ M.innerHTML=`<a class="back" href="#home">← Startseite</a><div class="ahead" style="--ac:${a.col}"><span class="ti-ico">${a.icon}</span><h1>${a.name.toUpperCase()}</h1><p>${a.desc}</p><div class="prog"><i style="width:${d/ls.length*100}%"></i></div><div class="ti-foot">${d}/${ls.length} LEKTIONEN GESEHEN</div></div>
+ <div class="lgrid" style="--ac:${a.col}">${ls.map((l,i)=>`<a class="lcard" href="#l-${l.id}"><span class="lk">LEKTION ${i+1}</span><b>${l.t}</b><span class="lsub">${l.steps[0].say}</span>${ST.seen[l.id]?'<span class="done">✓</span>':''}</a>`).join('')}</div>`;
+}
+function vLesson(id){
+ const l=byId[id];if(!l)return vHome();
+ const a=areaOf(l.a),ls=lessonsOf(l.a),idx=ls.indexOf(l),prev=L[l.i-1],next=L[l.i+1];
+ M.innerHTML=`<a class="back" href="#b-${a.id}">← ${a.name}</a>
+ <div style="--ac:${a.col}"><div class="meta">LEKTION ${idx+1} · ${a.name.toUpperCase()}</div><h1 class="ltitle">${l.t}</h1>
+ <div class="player"><canvas id="cv" aria-label="Animation: ${l.t}"></canvas>
+  <div class="cap"><div class="sn" id="sn">SCHRITT 1 / ${l.steps.length}</div><p id="say"></p></div>
+  <div class="ctrl"><button class="pbtn" id="pb" aria-label="Abspielen/Pause">▶</button><input type="range" id="rg" min="0" max="1000" value="0" aria-label="Spulen"><span class="tm" id="tm">0:00</span></div>
+  <div class="ctrl2"><span id="spd" style="display:flex;gap:6px"><button class="sbtn" data-s=".5">½×</button><button class="sbtn on" data-s="1">1×</button><button class="sbtn" data-s="2">2×</button></span><button class="sbtn" id="rs" title="Neustart">⟲</button><span class="gap"></span><span id="steps" style="display:flex;gap:6px;flex-wrap:wrap">${l.steps.map((_,i)=>`<button class="sbtn">${i+1}</button>`).join('')}</span></div>
+ </div>
+ <div class="info">
+  <div class="ibox" style="--c:var(--blue)"><h3>WAS IST DAS?</h3><p>${l.info.was}</p></div>
+  <div class="ibox" style="--c:var(--green)"><h3>SO ERKENNST DU ES · SO GEHT’S</h3><p>${l.info.so}</p></div>
+  <div class="ibox" style="--c:var(--gold)"><h3>WAS BEDEUTET ES?</h3><p>${l.info.bed}</p></div>
+  <div class="ibox" style="--c:var(--red)"><h3>TIPP</h3><p>${l.info.tipp}</p></div>
+ </div>
+ <div class="lnav"><a href="${prev?'#l-'+prev.id:'#'}" class="${prev?'':'dis'}"><small>← ZURÜCK</small>${prev?prev.t:'–'}</a><a class="nx ${next?'':'dis'}" href="${next?'#l-'+next.id:'#'}"><small>WEITER →</small>${next?next.t:'–'}</a></div></div>`;
+ setupPlayer(l);
+}
+
+/* ============ Quiz ============ */
+const KQ=[
+ ['Wie schnell breiten sich Funkwellen aus?',['Mit Lichtgeschwindigkeit, rund 300.000 km/s','Mit Schallgeschwindigkeit, rund 340 m/s','Etwa 1.000 km/h','So schnell wie Strom im Haushalt: 230 km/s'],'welle','Funkwellen sind elektromagnetische Wellen – genau wie Licht.'],
+ ['Wer hat Funkwellen als Erster nachgewiesen?',['Heinrich Hertz','Albert Einstein','Thomas Edison','Isaac Newton'],'welle','Heinrich Hertz wies sie zwischen 1886 und 1888 in Karlsruhe nach.'],
+ ['Was gibt die Frequenz an?',['Wie oft eine Welle pro Sekunde schwingt','Wie laut ein Signal ist','Wie lang ein Kabel ist','Wie viele Handys im Netz sind'],'frequenz','Einheit: Hertz – 1 Hz ist eine Schwingung pro Sekunde.'],
+ ['Was passiert mit der Wellenlänge, wenn die Frequenz steigt?',['Sie wird kürzer','Sie wird länger','Sie bleibt gleich','Sie verschwindet'],'frequenz','Wellenlänge = Lichtgeschwindigkeit ÷ Frequenz.'],
+ ['Wie viele Schwingungen pro Sekunde sind 1 GHz?',['Eine Milliarde','Eine Million','Tausend','Hundert'],'frequenz','Giga = Milliarde. 1 GHz = 1.000.000.000 Hz.'],
+ ['Wer verteilt in Deutschland die Funkfrequenzen?',['Die Bundesnetzagentur','Die Telekom','Der TÜV','Das Kraftfahrt-Bundesamt'],'spektrum','Mobilfunk-Frequenzen werden von der Bundesnetzagentur versteigert.'],
+ ['In welchem Frequenzbereich liegt UKW-Radio?',['87,5 bis 108 MHz','2,4 bis 2,5 GHz','470 bis 694 MHz','10,7 bis 12,75 GHz'],'spektrum','UKW liegt zwischen 87,5 und 108 MHz.'],
+ ['Wie lang ist ein einfacher Dipol ungefähr?',['Eine halbe Wellenlänge','Zehn Wellenlängen','Genau einen Meter','Eine hundertstel Wellenlänge'],'antenne','Ein Halbwellendipol ist etwa λ/2 lang.'],
+ ['Warum sind Antennen im Handy so klein?',['Weil Handyfrequenzen kurze Wellenlängen haben','Weil sie nur empfangen','Weil sie aus Gold sind','Weil das Netz sie verstärkt'],'antenne','Hohe Frequenz = kurze Wellenlänge = kleine Antenne.'],
+ ['Was ändert sich bei der Frequenzmodulation (FM)?',['Wie dicht die Schwingungen sind','Die Stärke der Welle','Die Farbe der Welle','Gar nichts'],'modulation','Bei FM bleibt die Stärke gleich, die Frequenz schwankt.'],
+ ['Wie viele Bits trägt ein Zustand bei 16-QAM?',['4','16','2','8'],'modulation','16 Zustände = 2⁴ → 4 Bits pro Zustand.'],
+ ['Was passiert mit der Funkleistung bei doppelter Entfernung (freier Raum)?',['Es kommt nur noch ein Viertel an','Es kommt die Hälfte an','Sie bleibt gleich','Sie verdoppelt sich'],'ausbreitung','Die Leistung nimmt mit dem Quadrat der Entfernung ab.'],
+ ['Welches Material schirmt Funk am stärksten ab?',['Metall','Holz','Glas ohne Beschichtung','Gipskarton'],'ausbreitung','Metall reflektiert und blockiert Funkwellen fast vollständig.'],
+ ['Warum zeichnet man Funkzellen als Waben?',['Weil Sechsecke eine Fläche lückenlos abdecken','Weil Masten sechseckig sind','Weil es sechs Netzbetreiber gibt','Aus Tradition der Imker'],'zellen','Sechsecke schließen lückenlos aneinander an und ähneln einem Kreis.'],
+ ['Warum sind Funkzellen in Städten kleiner?',['Weil dort mehr Menschen das Netz gleichzeitig nutzen','Weil Städte kleiner sind','Weil dort weniger Strom da ist','Weil Funk in Städten verboten ist'],'zellen','Kleinere Zellen = mehr Kapazität pro Fläche.'],
+ ['Wie viele Sektoren hat ein typischer Mobilfunkmast?',['Drei, je 120 Grad','Einen, rundherum','Zehn','Sechs, je 90 Grad'],'mast','Drei Antennenfelder decken je ein Drittel des Kreises ab.'],
+ ['Woran erkennst du Richtfunk-Antennen am Mast?',['An runden, trommelartigen Antennen','An roten Lichtern','An langen Drähten','An Solarzellen'],'mast','Richtfunk verbindet Masten untereinander über Funkstrecken.'],
+ ['Welcher Teil eines Handygesprächs läuft meist per Funk?',['Nur der Weg zwischen Handy und Mast','Die ganze Strecke','Nur der Weg im Kernnetz','Nur ins Ausland'],'anruf','Der Rest läuft überwiegend über Glasfaser.'],
+ ['Was ist ein Handover?',['Die Übergabe eines Gesprächs an die nächste Funkzelle','Das Ausschalten des Handys','Ein neuer Vertrag','Das Aufladen per Kabel'],'handover','Ohne Handover würde das Gespräch beim Zellwechsel abbrechen.'],
+ ['Was brauchst du nach dreimal falscher PIN?',['Die PUK','Einen neuen Vertrag','Die IMSI','Einen neuen Akku'],'sim','Die PUK steht auf dem Kartenhalter der SIM.'],
+ ['Was ist eine eSIM?',['Ein fest eingebauter SIM-Chip, auf den das Profil geladen wird','Eine besonders große SIM-Karte','Eine SIM nur für E-Mails','Eine SIM aus Papier'],'sim','Das Profil kommt z. B. per QR-Code aufs Handy.'],
+ ['Wie viele Unternehmen in Deutschland betreiben ein eigenes Mobilfunknetz?',['Vier','Zwei','Zehn','Eins'],'betreiber','Telekom, Vodafone, O2 Telefónica und 1&1.'],
+ ['Wann startete in Deutschland das digitale GSM-Netz (2G)?',['1992','1958','2004','2010'],'g1g2','1992 starteten die D-Netze D1 und D2.'],
+ ['Wie viele Zeichen passen in eine SMS?',['160','60','1.000','16'],'g1g2','Eine klassische SMS hat höchstens 160 Zeichen.'],
+ ['Welche Generation wurde in Deutschland 2021 abgeschaltet?',['3G (UMTS)','2G (GSM)','4G (LTE)','5G'],'g3','Die 3G-Frequenzen werden heute für 4G und 5G genutzt.'],
+ ['Wofür steht LTE?',['Long Term Evolution','Lange Telefon-Einheit','Light Transfer Energy','Low Tech Edition'],'g4','LTE ist der Standard hinter 4G.'],
+ ['Was bedeutet MIMO?',['Mehrere Antennen senden gleichzeitig verschiedene Daten','Ein Mast für mehrere Betreiber','Ein besonders kleines Handy','Ein Tarif ohne Datenvolumen'],'g4','MIMO = Multiple Input, Multiple Output.'],
+ ['Was bedeutet „4G+“ in der Statusleiste?',['Mehrere Frequenzbänder werden gebündelt','Das Handy hat 4 Antennen','Es sind 4 Balken Empfang','Der Akku ist zu 40 % voll'],'g4','Carrier Aggregation bündelt Bänder für mehr Tempo.'],
+ ['Was ist Beamforming bei 5G?',['Das Signal wird gezielt auf ein Handy gebündelt','Der Mast leuchtet nachts','Das Handy wird gekühlt','Ein neues Ladegerät'],'g5','Wie ein Scheinwerfer statt einer Glühbirne.'],
+ ['Was ist die Latenz?',['Die Reaktionszeit des Netzes','Die Akkulaufzeit','Die Größe einer Funkzelle','Die Lautstärke beim Telefonieren'],'g5','Bei 5G sind wenige Millisekunden möglich.'],
+ ['Welches Frequenzband reicht am weitesten?',['700 MHz','3,6 GHz','2,6 GHz','5 GHz'],'baender','Tiefe Frequenzen haben die größte Reichweite.'],
+ ['Wann soll 6G ungefähr kommen?',['Um 2030','2026','2045','Es ist schon überall da'],'g6','Die Standards werden gerade entwickelt.'],
+ ['Auf welchen Frequenzen funkt WLAN?',['2,4 GHz, 5 GHz und 6 GHz','100 MHz','27 MHz','13,56 MHz'],'wlan','Die freien Bänder für WLAN liegen bei 2,4, 5 und 6 GHz.'],
+ ['Was ist ein Mesh-System?',['Mehrere WLAN-Stationen, die gemeinsam ein Netz bilden','Ein besonders schnelles Kabel','Eine Satellitenschüssel','Ein Handytarif'],'wlan','Mesh verteilt das WLAN im ganzen Haus.'],
+ ['Welche 2,4-GHz-Kanäle überlappen sich nicht?',['1, 6 und 11','1, 2 und 3','5, 6 und 7','Alle 13'],'kanaele','In Europa geht auch 1, 5, 9 und 13.'],
+ ['Wie oft springt Bluetooth bis zu pro Sekunde den Kanal?',['1.600-mal','10-mal','Einmal','Nie'],'bluetooth','Das Frequenzspringen macht Bluetooth robust gegen Störungen.'],
+ ['Nach wem ist Bluetooth benannt?',['Nach dem Wikingerkönig Harald Blauzahn','Nach einem Zahnarzt','Nach einer Farbe im Logo','Nach dem Erfinder Herrn Blau'],'bluetooth','Harald Blauzahn vereinte im 10. Jahrhundert Dänemark und Norwegen.'],
+ ['Auf welcher Frequenz arbeitet NFC?',['13,56 MHz','2,4 GHz','900 MHz','87,5 MHz'],'nfc','NFC funkt nur über wenige Zentimeter.'],
+ ['Warum brauchen viele RFID-Chips keine Batterie?',['Das Lesegerät versorgt sie über sein Feld mit Energie','Sie haben eine Solarzelle','Sie werden mit Wärme betrieben','Sie funken gar nicht'],'nfc','Das Feld des Lesegeräts weckt den Chip auf.'],
+ ['Welche WLAN-Verschlüsselung ist die beste?',['WPA3','WEP','Keine','WPS'],'wlansicher','WPA3 ist aktuell der sicherste Standard, WEP gilt als geknackt.'],
+ ['Was ist das Besondere bei DAB+ gegenüber UKW?',['Digital, ohne Rauschen und mit Senderwahl per Name','Es funktioniert nur mit Kabel','Es braucht Internet','Es ist lauter'],'radio','Mehrere Sender teilen sich digital einen Kanal.'],
+ ['Was bedeutet die „digitale Klippe“?',['Digitaler Empfang ist entweder sauber oder bricht ganz ab','Das Radio fällt vom Regal','Das Signal wird langsam leiser','Der Akku ist leer'],'radio','Anders als UKW rauscht DAB+ nicht langsam weg.'],
+ ['In welcher Höhe stehen geostationäre Satelliten?',['Rund 36.000 km','Rund 550 km','Rund 400 km','Rund 384.000 km'],'satellit','Genau: 35.786 km über dem Äquator.'],
+ ['Wohin zeigen die meisten Satellitenschüsseln in Deutschland?',['Nach Süden','Nach Norden','Senkrecht nach oben','Nach Westen'],'satellit','Die Satelliten stehen über dem Äquator – von uns aus im Süden.'],
+ ['Wie viele Satelliten braucht ein Navi mindestens für eine genaue Position?',['Vier','Einen','Zwei','Zwölf'],'gps','Drei für den Ort, einer für die Zeitkorrektur.'],
+ ['Sendet dein Handy beim GPS-Empfang Daten an den Satelliten?',['Nein, es empfängt nur','Ja, ständig','Nur nachts','Nur im Ausland'],'gps','Darum funktioniert GPS auch ohne Mobilfunknetz.'],
+ ['Wie hoch fliegen Satelliten wie Starlink ungefähr?',['Rund 550 km','Rund 36.000 km','Rund 10 km','Rund 20.000 km'],'leo','Der niedrige Orbit sorgt für kurze Verzögerung.'],
+ ['Welcher dBm-Wert bedeutet den besten Empfang?',['−70 dBm','−100 dBm','−115 dBm','−125 dBm'],'empfang','Je näher an 0, desto stärker das Signal.'],
+ ['Was bedeutet „−3 dB“?',['Die Leistung halbiert sich','Die Leistung verdreifacht sich','Die Leistung sinkt um 3 Watt','Nichts ändert sich'],'empfang','3 dB weniger = halbe Leistung.'],
+ ['Was hilft beim Telefonieren im Haus ohne Netz?',['WLAN Call (WLAN-Telefonie)','Das Handy in den Kühlschrank legen','Mehr Datenvolumen kaufen','Den Flugmodus einschalten'],'funkloch','Das Handy telefoniert dann über den Internetanschluss.'],
+ ['Mit welcher App der Bundesnetzagentur kann man Funklöcher melden?',['Breitbandmessung','NINA','Funkfinder','Netzradar Pro'],'funkloch','Die App „Breitbandmessung“ hat eine Funkloch-Erfassung.'],
+ ['Wie hoch ist der SAR-Grenzwert für Handys am Kopf in der EU?',['2,0 W/kg','20 W/kg','0,02 W/kg','200 W/kg'],'strahlung','Der SAR-Wert steht im Datenblatt des Handys.'],
+ ['Welche Art von Strahlung sind Funkwellen?',['Nicht-ionisierende Strahlung','Ionisierende Strahlung wie Röntgen','Radioaktive Strahlung','Gar keine Strahlung'],'strahlung','Funkwellen haben zu wenig Energie, um Atome zu ionisieren.'],
+ ['Funktioniert in Deutschland ein Notruf ohne SIM-Karte?',['Nein, seit 2009 nicht mehr','Ja, immer','Nur mit WLAN','Nur in Bayern'],'notruf','Man braucht eine gültige SIM oder eSIM.'],
+ ['Was ist Cell Broadcast?',['Eine Warnung an alle Handys in einer Funkzelle','Ein Radiosender','Eine SMS-Werbung','Ein Handytarif'],'notruf','Behörden warnen so bei Unwetter, Hochwasser oder Großbrand.'],
+ ['Wie viele Bit hat ein Byte?',['8','10','2','1.000'],'daten','1 Byte = 8 Bit.'],
+ ['Was bedeutet PMR446?',['Lizenzfreie Funkgeräte auf 446 MHz','Ein Handytarif mit 446 Minuten','Ein Satellit','Ein WLAN-Standard'],'funkgeraete','Kleine Handfunkgeräte mit 0,5 Watt – ohne Anmeldung.'],
+ ['Was braucht man für Amateurfunk?',['Eine bestandene Prüfung bei der Bundesnetzagentur','Nur ein Handy','Einen Führerschein','Nichts'],'funkgeraete','Mit Amateurfunk-Zulassung darf man weltweit funken.']
+];
+const rnd=n=>Math.floor(Math.random()*n);
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const fmt=(v,d=0)=>v.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+const uniq=(right,cands)=>{const o=[right];for(const c of cands){if(o.length>=4)break;if(!o.includes(c))o.push(c);}let k=2;while(o.length<4){const v=right+' ('+(k++)+')';if(!o.includes(v))o.push(v);}return o;};
+const lam=m=>m>=1?fmt(m,m%1?1:0)+' m':fmt(m*100,(m*100)%1?1:0)+' cm';
+function calcQ(){
+ const k=rnd(6);
+ if(k===0){const f=[[100,3],[150,2],[300,1],[600,.5],[750,.4],[1500,.2],[2400,.125],[3000,.1],[5000,.06]][rnd(9)],r=f[1];
+  return{q:`Rechenaufgabe: Wie groß ist die Wellenlänge bei ${fmt(f[0])} MHz? (Faustformel: λ in m = 300 ÷ f in MHz)`,opts:uniq(lam(r),[lam(r*10),lam(r/10),lam(r*2),lam(r/2)]),l:'frequenz',exp:`300 ÷ ${fmt(f[0])} = ${lam(r)}.`};}
+ if(k===1){const gb=[1,2,4,5,8][rnd(5)],sp=[50,100,200,250,400][rnd(5)],s=gb*8000/sp;
+  const t=x=>x>=120?fmt(x/60,x%60?1:0)+' Minuten':fmt(x,x%1?1:0)+' Sekunden';
+  return{q:`Rechenaufgabe: Wie lange dauert der Download einer ${gb}-GB-Datei bei ${sp} Mbit/s (ohne Pausen)?`,opts:uniq(t(s),[t(s*8),t(s/8),t(s*2),t(s/2)]),l:'daten',exp:`${fmt(gb*1000)} MB × 8 = ${fmt(gb*8000)} Mbit. ${fmt(gb*8000)} ÷ ${sp} = ${fmt(s,s%1?1:0)} Sekunden.`};}
+ if(k===2){const d=[[3,'die Hälfte'],[6,'ein Viertel'],[10,'ein Zehntel'],[20,'ein Hundertstel']][rnd(4)];
+  return{q:`Rechenaufgabe: Das Signal wird um ${d[0]} dB schwächer. Wie viel Leistung bleibt übrig?`,opts:uniq(d[1],['die Hälfte','ein Viertel','ein Zehntel','ein Hundertstel','ein Drittel']),l:'empfang',exp:'Merke: −3 dB = ½, −6 dB = ¼, −10 dB = 1/10, −20 dB = 1/100.'};}
+ if(k===3){const m=[2,3,4,5][rnd(4)],r=m*m;
+  return{q:`Rechenaufgabe: Du bist ${m}-mal so weit vom Sender entfernt (freier Raum). Welcher Teil der Leistung kommt noch an?`,opts:uniq('1/'+r,['1/'+m,'1/'+(m*2),'1/'+(r*2),'1/'+(r+1)]),l:'ausbreitung',exp:`Die Leistung sinkt mit dem Quadrat der Entfernung: ${m} × ${m} = ${r} → 1/${r}.`};}
+ if(k===4){const sp=[16,40,80,100,200,400,800][rnd(7)],r=sp/8;
+  return{q:`Rechenaufgabe: Dein Anschluss hat ${sp} Mbit/s. Wie viele Megabyte pro Sekunde sind das?`,opts:uniq(fmt(r,r%1?1:0)+' MB/s',[fmt(sp*8)+' MB/s',fmt(sp)+' MB/s',fmt(r*2,r%1?1:0)+' MB/s',fmt(r/2,(r/2)%1?1:0)+' MB/s']),l:'daten',exp:`${sp} ÷ 8 = ${fmt(r,r%1?1:0)} MB/s, weil 1 Byte = 8 Bit.`};}
+ const h=[1,2,3,4][rnd(4)],per=[1.5,2,3][rnd(3)],v=h*per;
+ return{q:`Rechenaufgabe: Du schaust ${h} Stunde${h>1?'n':''} HD-Video unterwegs. Es braucht etwa ${fmt(per,per%1?1:0)} GB pro Stunde. Wie viel Datenvolumen ist das?`,opts:uniq(fmt(v,v%1?1:0)+' GB',[fmt(v*2,(v*2)%1?1:0)+' GB',fmt(v/2,(v/2)%1?1:0)+' GB',fmt(v+1,(v+1)%1?1:0)+' GB',fmt(per,per%1?1:0)+' GB']),l:'daten',exp:`${h} × ${fmt(per,per%1?1:0)} GB = ${fmt(v,v%1?1:0)} GB.`};
+}
+function picQ(ex){const pool=L.filter(x=>!ex.includes(x.id)),l=pool[rnd(pool.length)],others=shuf(L.filter(x=>x!==l)).slice(0,3);ex.push(l.id);
+ return{pic:l,q:'Bilderfrage: Zu welcher Lektion gehört dieses Bild?',opts:[l.t,...others.map(o=>o.t)],l:l.id,exp:`Das Bild stammt aus der Lektion „${l.t}“.`};}
+let QZ=null;
+function newQuiz(){
+ const ks=shuf(KQ).slice(0,5).map(k=>({q:k[0],opts:k[1],l:k[2],exp:k[3]})),ex=[];
+ const qs=shuf([...ks,picQ(ex),picQ(ex),calcQ(),calcQ(),calcQ()]);
+ qs.forEach(x=>{const right=x.opts[0];x.sh=shuf(x.opts);x.ok=x.sh.indexOf(right);});
+ QZ={qs,i:0,pts:0,wrong:[]};
+}
+function vQuiz(){
+ if(!QZ){M.innerHTML=`<a class="back" href="#home">← Startseite</a><div class="qcard" style="text-align:center"><div style="font-size:52px">🎯</div><h1 class="ltitle" style="margin-top:6px">Funk-Quiz</h1><p style="color:var(--mut)">10 zufällige Fragen – Bilderfragen, Wissensfragen und Rechenaufgaben.</p><div class="score" style="font-size:20px">BESTWERT ${ST.best}/10</div><button class="big" id="go">QUIZ STARTEN</button></div>`;
+  document.getElementById('go').onclick=()=>{newQuiz();vQuiz();};return;}
+ if(QZ.i>=QZ.qs.length){
+  const nb=QZ.pts>ST.best;if(nb){ST.best=QZ.pts;}ST.runs++;save();renderSide();
+  const rep=[...new Set(QZ.wrong)];
+  M.innerHTML=`<a class="back" href="#home">← Startseite</a><div class="qcard"><div class="qtop"><span>ERGEBNIS</span><span>BESTWERT ${ST.best}/10</span></div><div class="score" style="color:${QZ.pts>=8?'var(--green)':QZ.pts>=5?'var(--gold)':'var(--red)'}">${QZ.pts}/10</div><p style="text-align:center;color:var(--mut)">${nb?'🏆 Neuer Bestwert!':QZ.pts>=8?'Stark – du kennst dich aus!':QZ.pts>=5?'Gut! Mit etwas Wiederholung schaffst du mehr.':'Schau dir die Lektionen noch einmal an.'}</p>
+  ${rep.length?`<div class="rep" style="margin-top:14px"><div class="meta" style="color:var(--mut)">ZUM WIEDERHOLEN</div>${rep.map(id=>`<a href="#l-${id}">▶ ${byId[id].t} <span style="color:var(--mut);font-size:12px">· ${areaOf(byId[id].a).name}</span></a>`).join('')}</div>`:''}
+  <button class="big" id="again">NOCH EINMAL</button></div>`;
+  document.getElementById('again').onclick=()=>{newQuiz();vQuiz();};QZ=null;return;}
+ const x=QZ.qs[QZ.i];
+ M.innerHTML=`<a class="back" href="#home">← Startseite</a><div class="qcard"><div class="qtop"><span>FRAGE ${QZ.i+1} / 10</span><span>PUNKTE ${QZ.pts}</span></div><div class="qbar"><i style="width:${QZ.i*10}%"></i></div>
+ ${x.pic?'<div class="qimg"><canvas id="qcv"></canvas></div>':''}<div class="qq">${x.q}</div><div class="opts">${x.sh.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div><div id="fb"></div></div>`;
+ if(x.pic){const cv=document.getElementById('qcv'),les=x.pic;const d=()=>paint(cv,les,les.steps.length-1,1);redrawHooks=[d];requestAnimationFrame(d);}
+ M.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,ok=i===x.ok;
+  M.querySelectorAll('.opt').forEach((o,j)=>{o.disabled=true;if(j===x.ok)o.classList.add('ok');else if(j===i)o.classList.add('no');});
+  if(ok)QZ.pts++;else QZ.wrong.push(x.l);
+  document.getElementById('fb').innerHTML=`<div class="fb"><b style="color:${ok?'var(--green)':'var(--red)'}">${ok?'✓ RICHTIG!':'✗ LEIDER FALSCH'}</b><div style="margin-top:4px">${x.exp}</div><a class="go" href="#l-${x.l}">→ Zur Lektion „${byId[x.l].t}“</a></div><button class="big" id="nx">${QZ.i<9?'NÄCHSTE FRAGE →':'ERGEBNIS ANZEIGEN'}</button>`;
+  document.getElementById('nx').onclick=()=>{QZ.i++;vQuiz();window.scrollTo(0,0);};
+ });
+}
+
+/* ============ Router ============ */
+function route(){
+ stopPlayer();redrawHooks=[];
+ const h=location.hash.replace(/^#/,'')||'home',m=h.match(/^(b|l)-([\w-]+)$/),p=m?[m[1],m[2]]:[h];
+ if(p[0]!=='quiz')QZ=null;
+ if(p[0]==='b')vArea(p[1]);else if(p[0]==='l')vLesson(p[1]);else if(p[0]==='quiz')vQuiz();else vHome();
+ renderSide();window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+readPal();applyTheme();route();
+if('serviceWorker' in navigator&&location.protocol==='https:'&&!/claude|anthropic/.test(location.hostname)){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+</script>
+</body></html>
